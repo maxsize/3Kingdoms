@@ -4,14 +4,16 @@ using System;
 using Adic;
 using ThreeK.Game.StateMachine.Input;
 using Adic.Container;
+using _3Kingdoms.Game.StateMachine.State;
 
 namespace ThreeK.Game.StateMachine.State
 {
-    public class IdleState : State
+    [InjectFromContainer("MainContainer")]
+    public class IdleState : MonoState
     {
         [Inject] public IInjectionContainer Container;
 
-        public IdleState(IMonoStateMachine stateMachine) : base(stateMachine)
+        public IdleState(IStateMachine stateMachine) : base(stateMachine as MonoBehaviour)
         {
         }
 
@@ -19,8 +21,7 @@ namespace ThreeK.Game.StateMachine.State
         {
             base.Enter(input);
 
-            var transform = this.stateMachine.Client;
-            var animator = transform.GetComponent<Animator>();
+            var animator = Machine.GetComponent<Animator>();
             animator.SetBool("Moving", false);
             animator.SetBool("Running", false);
         }
@@ -28,9 +29,9 @@ namespace ThreeK.Game.StateMachine.State
         public override IState HandleInput(IInput input)
         {
             if (input is AttackInput)
-                return Container.Resolve<AttackState>();
+                return Container.Resolve<IState>(typeof(AttackState));
             if (input is MoveInput)
-                return Container.Resolve<MoveState>();
+                return Container.Resolve<IState>(typeof(MoveState));
             return this;
         }
     }

@@ -1,12 +1,13 @@
 ﻿using System;
 using ThreeK.Game.StateMachine.Input;
+using UnityEngine.Events;
 
 namespace ThreeK.Game.StateMachine.State
 {
     public interface IState
     {
-        Delegate OnStateEnter { get; }
-        Delegate OnStateExit { get; }
+        UnityEvent OnStateEnter { get; }
+        UnityEvent OnStateExit { get; }
         /// <summary>
         /// Handle input and returns next state.
         /// </summary>
