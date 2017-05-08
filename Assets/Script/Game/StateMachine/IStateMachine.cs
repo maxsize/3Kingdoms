@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections.Generic;
 using ThreeK.Game.StateMachine.State;
 using ThreeK.Game.StateMachine.Input;
@@ -10,6 +10,11 @@ namespace ThreeK.Game.StateMachine
         IEnumerable<IState> GetStates();
         IState CurrentState { get; }
         void AddStates(IState[] states, IState defaultState);
-        void HandleInput(IInput input);
+        /// <summary>
+        /// Handle input, generate and return next state
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        IState HandleInput(IInput input);
     }
 }
