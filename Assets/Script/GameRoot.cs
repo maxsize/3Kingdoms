@@ -1,4 +1,4 @@
-﻿using Adic;
+using Adic;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,13 +14,16 @@ public class GameRoot : ContextRoot
         container.RegisterExtension<UnityBindingContainerExtension>()
             .RegisterExtension<CommanderContainerExtension>()
             .RegisterExtension<EventCallerContainerExtension>()
-            .Bind<IInput>().ToFactory<InputFactory>()
-            .Bind<IMonoStateMachine>().ToFactory<StateMachine.Factory>()
-            .Bind<Player>().ToGameObject("Player")
-            .Bind<Follower>().ToGameObject("Main Camera");
+            .Bind<IInput>().ToFactory<InputFactory>().As(typeof(MoveInput))
+            .Bind<IStateMachine>().ToPrefab<Player>("Warrior3/Hammer/Prefabs/Hammer").As("Hammer")
+            .Bind<IStateMachine>().ToPrefab<Player>("Warrior3/Crossbow/Prefabs/Crossbow").As("Crossbow")
+            .Bind<IStateMachine>().ToPrefab<Player>("Warrior3/Swordsman/Prefabs/Swordsman").As("Swordsman")
+            .Bind<ContextRoot>().To(this)
+            .Bind<GameController>().ToSingleton();
     }
 
     public override void Init()
     {
     }
 }
+
