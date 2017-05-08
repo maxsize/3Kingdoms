@@ -1,4 +1,4 @@
-﻿using Adic;
+using Adic;
 using System;
 using System.Collections.Generic;
 using ThreeK.Game.StateMachine.Input;
@@ -9,34 +9,23 @@ using Adic.Container;
 
 namespace ThreeK.Game.StateMachine
 {
-    public class StateMachine : IMonoStateMachine
+    public class StateMachine : InjectableBehaviour, IStateMachine
     {
-        private IState _currentState;
+        public IState CurrentState { get; protected set; }
         private List<IState> _states;
-        private MonoBehaviour _client;
 
-        public StateMachine(MonoBehaviour client)
+        [Inject]
+        public virtual void Construct()
         {
             _states = new List<IState>();
-            _client = client;
         }
 
-        public IState CurrentState
-        {
-            get { return _currentState; }
-        }
-
-        public MonoBehaviour Client
-        {
-            get { return _client; }
-        }
-
-        public void AddStates(IState[] states, IState defaultState)
+        public virtual void AddStates(IState[] states, IState defaultState)
         {
             _states.AddRange(states);
             if (!_states.Contains(defaultState))
                 _states.Add(defaultState);
-            _currentState = defaultState;
+            CurrentState = defaultState;
         }
 
         public IEnumerable<IState> GetStates()
@@ -44,34 +33,17 @@ namespace ThreeK.Game.StateMachine
             return _states.ToArray();
         }
 
-        public void HandleInput(IInput input)
+        public virtual IState HandleInput(IInput input)
         {
-            var next = _currentState.HandleInput(input);
+            var next = CurrentState.HandleInput(input);
             next.Enter(input);
-            _currentState = next;
+            CurrentState = next;
+            OnStateChange(CurrentState);
+            return next;
         }
 
-        protected void ChangeState(IState state)
+        protected virtual void OnStateChange(IState newState)
         {
-
-        }
-
-        public class Factory : IFactory
-        {
-            [Inject] public IInjectionContainer Container;
-
-            public object Create(InjectionContext context)
-            {
-                var machine = new StateMachine(context.parentInstance as MonoBehaviour);
-                List<IState> states = new List<IState>
-                {
-                    new IdleState(machine),
-                    new AttackState(machine),
-                    new MoveState(machine)
-                };
-                machine.AddStates(states.ToArray(), states[0]);
-                return machine;
-            }
         }
     }
 }
