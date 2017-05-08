@@ -5,7 +5,7 @@ using System.Text;
 using Adic;
 using ThreeK.Game.StateMachine;
 
-namespace Assets.Script
+namespace ThreeK.Game.Behavior
 {
     public class GameController
     {

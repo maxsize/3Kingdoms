@@ -14,28 +14,28 @@ namespace ThreeK.Game.StateMachine
     {
         [Inject("SubContainer")] public IInjectionContainer Container;
 
-        private List<IState> _stack;
+        protected List<IState> Stack;
 
         [Inject]
         public override void Construct()
         {
             base.Construct();
-            _stack = new List<IState>();
+            Stack = new List<IState>();
         }
 
         public override void AddStates(IState[] states, IState defaultState)
         {
             base.AddStates(states, defaultState);
-            if (_stack.Count == 0)
-                _stack.Add(defaultState);
+            if (Stack.Count == 0)
+                Stack.Add(defaultState);
         }
 
         public override IState HandleInput(IInput input)
         {
             var oldState = CurrentState;
             var next = base.HandleInput(input);
-            _stack.Add(oldState);
-            _stack.Add(next);
+            Stack.Add(oldState);
+            Stack.Add(next);
             return next;
         }
 
@@ -50,11 +50,8 @@ namespace ThreeK.Game.StateMachine
             Pop();
         }
 
-        private void Pop()
+        protected virtual void Pop()
         {
-            _stack.RemoveAt(_stack.Count - 1);          // Pop last state (current state)
-            CurrentState = _stack[_stack.Count - 1];    // Update current state
-            CurrentState.Enter(Container.Resolve<EmptyInput>());
         }
     }
 }

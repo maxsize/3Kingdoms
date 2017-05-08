@@ -8,10 +8,9 @@ using _3Kingdoms.Game.StateMachine.State;
 
 namespace ThreeK.Game.StateMachine.State
 {
-    [InjectFromContainer("MainContainer")]
     public class MoveState : MonoState
     {
-        [Inject("SubContainer")] public IInjectionContainer Container;
+        [Inject] public IInjectionContainer Container;
 
         private float _moveSpeed = 10;
         private Vector3 _target;
@@ -24,6 +23,7 @@ namespace ThreeK.Game.StateMachine.State
         {
             base.Enter(input);
             _target = (Vector3) input.Data;
+            //_target.y = 0;
             var animator = Machine.gameObject.GetComponent<Animator>();
             animator.SetBool("Moving", true);
             animator.SetBool("Running", true);
@@ -41,13 +41,18 @@ namespace ThreeK.Game.StateMachine.State
 
         private IEnumerator MoveTowards()
         {
-            var transform = Machine.transform;
+            var rigi = Machine.GetComponent<Rigidbody>();
+            var direction = _target - rigi.position;
+            direction = direction.normalized * _moveSpeed;
+            direction.y = 0;
+            rigi.velocity = direction;
             while (true)
             {
-                transform.position = Vector3.MoveTowards(transform.position, _target, _moveSpeed * Time.deltaTime);
-                if (Vector3.Distance(transform.position, _target) < 0.03)
+                //rigi.MovePosition(Vector3.MoveTowards(rigi.position, _target, _moveSpeed * Time.deltaTime));
+                if (Vector3.Distance(rigi.position, _target) < 0.03)
                 {
-                    transform.position = _target;
+                    //rigi.position = _target;
+                    rigi.velocity = Vector3.zero;
                     OnStateExit.Invoke();
                     yield break;
                 }

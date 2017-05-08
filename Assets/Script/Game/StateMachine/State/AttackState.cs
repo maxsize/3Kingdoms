@@ -7,7 +7,6 @@ using _3Kingdoms.Game.StateMachine.State;
 
 namespace ThreeK.Game.StateMachine.State
 {
-    [InjectFromContainer("MainContainer")]
     public class AttackState : MonoState
     {
         private const string ATTACK1_TRIGGER = "Attack1Trigger";

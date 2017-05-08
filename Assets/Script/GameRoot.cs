@@ -1,17 +1,20 @@
-using Adic;
+﻿using Adic;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
 using ThreeK.Game.StateMachine.Input;
 using ThreeK.Game.StateMachine;
+using ThreeK.Game.Behavior;
+using Adic.Container;
 
 public class GameRoot : ContextRoot
 {
+    private IInjectionContainer _container;
     public override void SetupContainers()
     {
-        var container = AddContainer<InjectionContainer>();
-        container.RegisterExtension<UnityBindingContainerExtension>()
+        _container = AddContainer<InjectionContainer>("MainContainer");
+        _container.RegisterExtension<UnityBindingContainerExtension>()
             .RegisterExtension<CommanderContainerExtension>()
             .RegisterExtension<EventCallerContainerExtension>()
             .Bind<IInput>().ToFactory<InputFactory>().As(typeof(MoveInput))
@@ -24,6 +27,7 @@ public class GameRoot : ContextRoot
 
     public override void Init()
     {
+        _container.Resolve<GameController>();
     }
 }
 

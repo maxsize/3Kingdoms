@@ -6,9 +6,13 @@ using ThreeK.Game.StateMachine.Input;
 using ThreeK.Game.StateMachine.State;
 using UnityEngine;
 
+[InjectFromContainer("MainContainer")]
 public class Player : PushdownAutomation
 {
-    [Inject] public IInjectionContainer Container;
+    [Inject] public IInjectionContainer MainContainer;
+    [Inject] public ContextRoot Context;
+
+    private IInjectionContainer _subContainer;
 
     protected override void Start()
     {
@@ -18,22 +22,23 @@ public class Player : PushdownAutomation
 
     void PostConstruct()
     {
-        var context = FindObjectOfType<ContextRoot>();
-        var subContainer = context.AddContainer<InjectionContainer>();
-        subContainer.RegisterExtension<UnityBindingContainerExtension>();
-        Container.Bind<IInjectionContainer>().To(subContainer).As("SubContainer");
+        _subContainer = Context.AddContainer<InjectionContainer>();
+        _subContainer.RegisterExtension<UnityBindingContainerExtension>();
+        MainContainer.Bind<IInjectionContainer>().To(_subContainer).As("SubContainer");
 
-        subContainer.Bind<IStateMachine>().To(this)
+        _subContainer.Bind<IStateMachine>().To(this)
             .Bind<IState>().To<IdleState>().As(typeof(IdleState))
             .Bind<IState>().To<MoveState>().As(typeof(MoveState))
+            .Bind<IState>().To<TurnState>().As(typeof(TurnState))
             .Bind<IState>().To<AttackState>().As(typeof(AttackState));
 
 
         List<IState> states = new List<IState>
         {
-            subContainer.Resolve<IState>(typeof(IdleState)),
-            subContainer.Resolve<IState>(typeof(MoveState)),
-            subContainer.Resolve<IState>(typeof(AttackState))
+            _subContainer.Resolve<IState>(typeof(IdleState)),
+            _subContainer.Resolve<IState>(typeof(MoveState)),
+            _subContainer.Resolve<IState>(typeof(TurnState)),
+            _subContainer.Resolve<IState>(typeof(AttackState))
         };
         AddStates(states.ToArray(), states[0]);
     }
@@ -42,9 +47,16 @@ public class Player : PushdownAutomation
 	void Update() {
 		if (Input.GetKeyDown(KeyCode.Mouse0))
 		{
-		    var input = Container.Resolve<IInput>(typeof(MoveInput));
+		    var input = MainContainer.Resolve<IInput>(typeof(MoveInput));
             if (input != null)
                 HandleInput(input);
         }
 	}
+
+    protected override void Pop()
+    {
+        Stack.RemoveAt(Stack.Count - 1);          // Pop last state (current state)
+        CurrentState = Stack[Stack.Count - 1];    // Update current state
+        CurrentState.Enter(_subContainer.Resolve<EmptyInput>());
+    }
 }

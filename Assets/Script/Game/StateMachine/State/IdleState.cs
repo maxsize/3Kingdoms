@@ -8,7 +8,6 @@ using _3Kingdoms.Game.StateMachine.State;
 
 namespace ThreeK.Game.StateMachine.State
 {
-    [InjectFromContainer("MainContainer")]
     public class IdleState : MonoState
     {
         [Inject] public IInjectionContainer Container;
@@ -31,7 +30,7 @@ namespace ThreeK.Game.StateMachine.State
             if (input is AttackInput)
                 return Container.Resolve<IState>(typeof(AttackState));
             if (input is MoveInput)
-                return Container.Resolve<IState>(typeof(MoveState));
+                return Container.Resolve<IState>(typeof(TurnState));
             return this;
         }
     }

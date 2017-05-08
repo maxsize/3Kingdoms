@@ -13,13 +13,11 @@
     <TargetFrameworkIdentifier>.NETFramework</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>Unity Subset v3.5</TargetFrameworkProfile>
-    <CompilerResponseFile>
-    </CompilerResponseFile>
+    <CompilerResponseFile></CompilerResponseFile>
     <UnityProjectType>Game:1</UnityProjectType>
     <UnityBuildTarget>StandaloneWindows:5</UnityBuildTarget>
     <UnityVersion>5.5.0f3</UnityVersion>
-    <RootNamespace>
-    </RootNamespace>
+    <RootNamespace></RootNamespace>
     <LangVersion>4</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -77,6 +75,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Resources\Warrior3\Code\IKHands.cs" />
+    <Compile Include="Assets\Resources\Warrior3\Code\SmoothFollow.cs" />
+    <Compile Include="Assets\Resources\Warrior3\Code\WarriorAnimationDemoFREE.cs" />
     <Compile Include="Assets\Script\Adic\Extensions\BindingsSetup\BindingPriority.cs" />
     <Compile Include="Assets\Script\Adic\Extensions\BindingsSetup\BindingsSetupExtension.cs" />
     <Compile Include="Assets\Script\Adic\Extensions\BindingsSetup\IBindingsSetup.cs" />
@@ -152,28 +153,28 @@
     <Compile Include="Assets\Script\Adic\Framework\Util\TypeUtils.cs" />
     <Compile Include="Assets\Script\Game\Behavior\Core\InjectableBehaviour.cs" />
     <Compile Include="Assets\Script\Game\Behavior\Follower.cs" />
+    <Compile Include="Assets\Script\Game\Behavior\GameController.cs" />
     <Compile Include="Assets\Script\Game\Behavior\Mover.cs" />
     <Compile Include="Assets\Script\Game\Behavior\Player.cs" />
     <Compile Include="Assets\Script\Game\Behavior\Spinner.cs" />
-    <Compile Include="Assets\Script\Game\StateMachine\IInjectorContainer.cs" />
-    <Compile Include="Assets\Script\Game\StateMachine\IMonoStateMachine.cs" />
-    <Compile Include="Assets\Script\Game\StateMachine\Input\InputFactory.cs" />
     <Compile Include="Assets\Script\Game\StateMachine\IStateMachine.cs" />
     <Compile Include="Assets\Script\Game\StateMachine\Input\AttackInput.cs" />
-    <Compile Include="Assets\Script\Game\StateMachine\Input\IInput.cs" />
+    <Compile Include="Assets\Script\Game\StateMachine\Input\EmptyInput.cs" />
     <Compile Include="Assets\Script\Game\StateMachine\Input\GameInput.cs" />
+    <Compile Include="Assets\Script\Game\StateMachine\Input\IInput.cs" />
+    <Compile Include="Assets\Script\Game\StateMachine\Input\InputFactory.cs" />
     <Compile Include="Assets\Script\Game\StateMachine\Input\InputResolver.cs" />
     <Compile Include="Assets\Script\Game\StateMachine\Input\MoveInput.cs" />
+    <Compile Include="Assets\Script\Game\StateMachine\PushdownAutomation.cs" />
     <Compile Include="Assets\Script\Game\StateMachine\State\AttackState.cs" />
     <Compile Include="Assets\Script\Game\StateMachine\State\IState.cs" />
     <Compile Include="Assets\Script\Game\StateMachine\State\IdleState.cs" />
+    <Compile Include="Assets\Script\Game\StateMachine\State\MonoState.cs" />
     <Compile Include="Assets\Script\Game\StateMachine\State\MoveState.cs" />
     <Compile Include="Assets\Script\Game\StateMachine\State\State.cs" />
+    <Compile Include="Assets\Script\Game\StateMachine\State\TurnState.cs" />
     <Compile Include="Assets\Script\Game\StateMachine\StateMachine.cs" />
     <Compile Include="Assets\Script\GameRoot.cs" />
-    <Compile Include="Assets\Warrior Pack Bundle 3 FREE\Code\IKHands.cs" />
-    <Compile Include="Assets\Warrior Pack Bundle 3 FREE\Code\SmoothFollow.cs" />
-    <Compile Include="Assets\Warrior Pack Bundle 3 FREE\Code\WarriorAnimationDemoFREE.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />
