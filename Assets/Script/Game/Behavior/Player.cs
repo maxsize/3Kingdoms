@@ -37,11 +37,8 @@ public class Player : PushdownAutomation
             .Bind<IState>().To<AttackState>().As(typeof(AttackState));
 
 
-        List<IState> states = new List<IState>
-        {
-            _subContainer.Resolve<IState>(typeof(IdleState))
-        };
-        AddStates(states.ToArray(), states[0]);
+        List<IState> states = new List<IState> { };
+        AddStates(states.ToArray(), _subContainer.Resolve<IState>(typeof(IdleState)));
     }
 
     // Update is called once per frame
@@ -64,8 +61,9 @@ public class Player : PushdownAutomation
 
     protected override void Pop()
     {
-        Stack.RemoveAt(Stack.Count - 1);          // Pop last state (current state)
-        CurrentState = Stack[Stack.Count - 1];    // Update current state
-        CurrentState.Enter(_subContainer.Resolve<EmptyInput>());
+        var next = Stack[Stack.Count - 1];
+        Stack.Remove(next);         // Pop last state (current state)
+        var input = _subContainer.Resolve<IInput>("CurrentInput");
+        OnStateChange(next, input);    // Update current state
     }
 }

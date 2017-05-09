@@ -23,13 +23,6 @@ namespace ThreeK.Game.StateMachine
             Stack = new List<IState>();
         }
 
-        public override void AddStates(IState[] states, IState defaultState)
-        {
-            base.AddStates(states, defaultState);
-            if (Stack.Count == 0)
-                Stack.Add(defaultState);
-        }
-
         public override IState HandleInput(IInput input)
         {
             var oldState = CurrentState;
@@ -40,18 +33,18 @@ namespace ThreeK.Game.StateMachine
             {
                 Stack.AddRange((next as IStateStack).GetStack());
                 next = Stack[Stack.Count - 1];
+                Stack.Remove(next);
             }
-            else
-                Stack.Add(next);
-            next.Enter(input);
-            CurrentState = next;
-            OnStateChange(CurrentState);
+
+            OnStateChange(next, input);
 
             return next;
         }
 
-        protected override void OnStateChange(IState newState)
+        protected virtual void OnStateChange(IState newState, IInput input)
         {
+            CurrentState = newState;
+            newState.Enter(input);
             newState.OnStateExit.AddListener(OnStateExit);
         }
 

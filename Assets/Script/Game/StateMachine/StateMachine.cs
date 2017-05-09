@@ -23,8 +23,6 @@ namespace ThreeK.Game.StateMachine
         public virtual void AddStates(IState[] states, IState defaultState)
         {
             _states.AddRange(states);
-            if (!_states.Contains(defaultState))
-                _states.Add(defaultState);
             CurrentState = defaultState;
         }
 
@@ -38,12 +36,7 @@ namespace ThreeK.Game.StateMachine
             var next = CurrentState.HandleInput(input);
             next.Enter(input);
             CurrentState = next;
-            OnStateChange(CurrentState);
             return next;
-        }
-
-        protected virtual void OnStateChange(IState newState)
-        {
         }
     }
 }

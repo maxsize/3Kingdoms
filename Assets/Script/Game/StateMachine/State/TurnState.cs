@@ -21,7 +21,12 @@ public class TurnState : MonoState
 
     public override IState HandleInput(IInput input)
     {
-        if (input is EmptyInput) return Container.Resolve<IdleState>();
+        if (input is AttackInput || input is MoveInput)
+        {
+            Machine.StopCoroutine("TurnTowards");
+            OnStateExit.Invoke();
+            return Container.Resolve<IState>(typeof(StackedState));
+        }
         return this;
     }
 
@@ -52,12 +57,10 @@ public class TurnState : MonoState
         {
             var r = Quaternion.RotateTowards(trans.rotation, q, _turnSpeed * Time.deltaTime);
             trans.rotation = r;
-            var diff = Mathf.Abs(trans.rotation.y - q.y);
-            //Debug.Log(string.Format("{0}, {1}, {2}", diff, trans.rotation.y, q.y));
-            if (diff < 0.03)
+            var diff = Mathf.Abs(trans.eulerAngles.y - q.eulerAngles.y);
+            //Debug.Log(string.Format("{0}, {1}, {2}", diff, trans.rotation.eulerAngles.y, q.eulerAngles.y));
+            if (diff < 1)
             {
-                q.x = q.z = 0;
-                trans.rotation = q;
                 OnStateExit.Invoke();
                 break;
             }

@@ -13,11 +13,13 @@
     <TargetFrameworkIdentifier>.NETFramework</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>Unity Subset v3.5</TargetFrameworkProfile>
-    <CompilerResponseFile></CompilerResponseFile>
+    <CompilerResponseFile>
+    </CompilerResponseFile>
     <UnityProjectType>Game:1</UnityProjectType>
     <UnityBuildTarget>StandaloneWindows:5</UnityBuildTarget>
     <UnityVersion>5.5.0f3</UnityVersion>
-    <RootNamespace></RootNamespace>
+    <RootNamespace>
+    </RootNamespace>
     <LangVersion>4</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -169,8 +171,10 @@
     <Compile Include="Assets\Script\Game\StateMachine\State\AttackState.cs" />
     <Compile Include="Assets\Script\Game\StateMachine\State\IState.cs" />
     <Compile Include="Assets\Script\Game\StateMachine\State\IdleState.cs" />
+    <Compile Include="Assets\Script\Game\StateMachine\State\IStateStack.cs" />
     <Compile Include="Assets\Script\Game\StateMachine\State\MonoState.cs" />
     <Compile Include="Assets\Script\Game\StateMachine\State\MoveState.cs" />
+    <Compile Include="Assets\Script\Game\StateMachine\State\StackedState.cs" />
     <Compile Include="Assets\Script\Game\StateMachine\State\State.cs" />
     <Compile Include="Assets\Script\Game\StateMachine\State\TurnState.cs" />
     <Compile Include="Assets\Script\Game\StateMachine\StateMachine.cs" />

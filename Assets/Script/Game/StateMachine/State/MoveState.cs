@@ -32,10 +32,12 @@ namespace ThreeK.Game.StateMachine.State
 
         public override IState HandleInput(IInput input)
         {
-            if (input is AttackInput)
-                return Container.Resolve<IState>(typeof(AttackState));
-            if (input is MoveInput)
-                return Container.Resolve<IState>(typeof(MoveState));
+            if (input is AttackInput || input is MoveInput)
+            {
+                Machine.StopCoroutine("MoveTowards");
+                OnStateExit.Invoke();
+                return Container.Resolve<IState>(typeof(StackedState));
+            }
             return Container.Resolve<IState>(typeof(IdleState));
         }
 
@@ -52,10 +54,12 @@ namespace ThreeK.Game.StateMachine.State
             {
                 var dist = Vector3.Distance(trans.position, _target);
                 Debug.Log(string.Format("{0} {1} {2}", dist, trans.position, _target));
-                if (dist < 0.1)
+                if (dist < 1)
                 {
-                    OnStateExit.Invoke();
+                    animator.SetBool("Moving", false);
+                    animator.SetBool("Running", false);
                     rigi.velocity = Vector3.zero;
+                    OnStateExit.Invoke();
                     yield break;
                 }
                 yield return null;
