@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Adic;
 using Adic.Container;
 using ThreeK.Game.StateMachine;
@@ -9,8 +10,10 @@ using UnityEngine;
 [InjectFromContainer("MainContainer")]
 public class Player : PushdownAutomation
 {
-    [Inject] public IInjectionContainer MainContainer;
-    [Inject] public ContextRoot Context;
+    [Inject]
+    public IInjectionContainer MainContainer;
+    [Inject]
+    public ContextRoot Context;
 
     private IInjectionContainer _subContainer;
 
@@ -30,28 +33,34 @@ public class Player : PushdownAutomation
             .Bind<IState>().To<IdleState>().As(typeof(IdleState))
             .Bind<IState>().To<MoveState>().As(typeof(MoveState))
             .Bind<IState>().To<TurnState>().As(typeof(TurnState))
+            .Bind<IState>().To<StackedState>().As(typeof(StackedState))
             .Bind<IState>().To<AttackState>().As(typeof(AttackState));
 
 
         List<IState> states = new List<IState>
         {
-            _subContainer.Resolve<IState>(typeof(IdleState)),
-            _subContainer.Resolve<IState>(typeof(MoveState)),
-            _subContainer.Resolve<IState>(typeof(TurnState)),
-            _subContainer.Resolve<IState>(typeof(AttackState))
+            _subContainer.Resolve<IState>(typeof(IdleState))
         };
         AddStates(states.ToArray(), states[0]);
     }
 
     // Update is called once per frame
-	void Update() {
-		if (Input.GetKeyDown(KeyCode.Mouse0))
-		{
-		    var input = MainContainer.Resolve<IInput>(typeof(MoveInput));
-            if (input != null)
-                HandleInput(input);
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            if (CreateAndHandleInput(typeof(AttackInput))) return;
+            if (CreateAndHandleInput(typeof(MoveInput))) return;
         }
-	}
+    }
+
+    private bool CreateAndHandleInput(Type inputType)
+    {
+        var input = MainContainer.Resolve<IInput>(inputType);
+        if (input != null)
+            HandleInput(input);
+        return input != null;
+    }
 
     protected override void Pop()
     {
