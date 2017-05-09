@@ -28,9 +28,9 @@ namespace ThreeK.Game.StateMachine.State
         public override IState HandleInput(IInput input)
         {
             if (input is AttackInput)
-                return Container.Resolve<IState>(typeof(AttackState));
+                return Container.Resolve<IState>(typeof(StackedState));
             if (input is MoveInput)
-                return Container.Resolve<IState>(typeof(TurnState));
+                return Container.Resolve<IState>(typeof(StackedState));
             return this;
         }
     }

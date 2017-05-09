@@ -42,18 +42,20 @@ namespace ThreeK.Game.StateMachine.State
         private IEnumerator MoveTowards()
         {
             var rigi = Machine.GetComponent<Rigidbody>();
-            var direction = _target - rigi.position;
-            direction = direction.normalized * _moveSpeed;
-            direction.y = 0;
-            rigi.velocity = direction;
+            var trans = Machine.transform;
+            var animator = Machine.gameObject.GetComponent<Animator>();
+
+            animator.SetBool("Moving", true);
+            animator.SetBool("Running", true);
+            rigi.velocity = Vector3.forward * 10;
             while (true)
             {
-                //rigi.MovePosition(Vector3.MoveTowards(rigi.position, _target, _moveSpeed * Time.deltaTime));
-                if (Vector3.Distance(rigi.position, _target) < 0.03)
+                var dist = Vector3.Distance(trans.position, _target);
+                Debug.Log(string.Format("{0} {1} {2}", dist, trans.position, _target));
+                if (dist < 0.1)
                 {
-                    //rigi.position = _target;
-                    rigi.velocity = Vector3.zero;
                     OnStateExit.Invoke();
+                    rigi.velocity = Vector3.zero;
                     yield break;
                 }
                 yield return null;
