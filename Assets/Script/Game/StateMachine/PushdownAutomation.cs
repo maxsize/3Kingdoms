@@ -33,9 +33,20 @@ namespace ThreeK.Game.StateMachine
         public override IState HandleInput(IInput input)
         {
             var oldState = CurrentState;
-            var next = base.HandleInput(input);
             Stack.Add(oldState);
-            Stack.Add(next);
+
+            var next = CurrentState.HandleInput(input);
+            if (next is IStateStack)
+            {
+                Stack.AddRange((next as IStateStack).GetStack());
+                next = Stack[Stack.Count - 1];
+            }
+            else
+                Stack.Add(next);
+            next.Enter(input);
+            CurrentState = next;
+            OnStateChange(CurrentState);
+
             return next;
         }
 
