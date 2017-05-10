@@ -22,7 +22,7 @@ namespace ThreeK.Game.StateMachine.State
         public override void Enter(IInput input)
         {
             base.Enter(input);
-            _target = (Vector3) input.Data;
+            _target = GetDestination(input);
             //_target.y = 0;
             var animator = Machine.gameObject.GetComponent<Animator>();
             animator.SetBool("Moving", true);
@@ -41,10 +41,22 @@ namespace ThreeK.Game.StateMachine.State
             return Container.Resolve<IState>(typeof(IdleState));
         }
 
+        protected virtual Vector3 GetDestination(IInput input)
+        {
+            return (Vector3) input.Data;
+        }
+
+        protected virtual bool IsReached()
+        {
+            var trans = Machine.transform;
+            var dist = Vector3.Distance(trans.position, _target);
+            //Debug.Log(string.Format("{0} {1} {2}", dist, trans.position, _target));
+            return dist < 1;
+        }
+
         private IEnumerator MoveTowards()
         {
             var rigi = Machine.GetComponent<Rigidbody>();
-            var trans = Machine.transform;
             var animator = Machine.gameObject.GetComponent<Animator>();
 
             animator.SetBool("Moving", true);
@@ -52,9 +64,7 @@ namespace ThreeK.Game.StateMachine.State
             rigi.velocity = Vector3.forward * 10;
             while (true)
             {
-                var dist = Vector3.Distance(trans.position, _target);
-                Debug.Log(string.Format("{0} {1} {2}", dist, trans.position, _target));
-                if (dist < 1)
+                if (IsReached())
                 {
                     animator.SetBool("Moving", false);
                     animator.SetBool("Running", false);

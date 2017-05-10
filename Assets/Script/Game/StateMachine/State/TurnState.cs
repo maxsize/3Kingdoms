@@ -33,13 +33,22 @@ public class TurnState : MonoState
     public override void Enter(IInput input)
     {
         base.Enter(input);
-        _target = (Vector3)input.Data;
+        _target = GetTarget(input);
         //_target.y = 0;
         var animator = Machine.gameObject.GetComponent<Animator>();
         animator.SetBool("Moving", false);
         animator.SetBool("Running", false);
         Machine.StopAllCoroutines();
         StartCoroutine(TurnTowards());
+    }
+
+    private Vector3 GetTarget(IInput input)
+    {
+        if (input.Data is Vector3)
+            return (Vector3) input.Data;
+        if (input.Data is Transform)
+            return ((Transform) input.Data).position;
+        return Machine.transform.position;
     }
 
     private IEnumerator TurnTowards()

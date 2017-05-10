@@ -53,7 +53,7 @@ namespace ThreeK.Game.StateMachine.State
             {
                 // Create turn and move state
                 states.Add(Container.Resolve<IState>(typeof(AttackState)));
-                states.Add(Container.Resolve<IState>(typeof(MoveState)));
+                states.Add(Container.Resolve<IState>(typeof(Move2TargetState)));
                 states.Add(Container.Resolve<IState>(typeof(TurnState)));
             }
             return states;

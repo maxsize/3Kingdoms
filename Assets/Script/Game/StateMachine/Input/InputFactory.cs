@@ -19,20 +19,24 @@ namespace ThreeK.Game.StateMachine.Input
             if (context.identifier.Equals(typeof(AttackInput)))
                 input = CreateAttackInput(context);
 
-            var subContainer = Container.Resolve<IInjectionContainer>("SubContainer");
-            // Bind current input
-            subContainer.Unbind("CurrentInput");
-            subContainer.Bind<IInput>().To(input).As("CurrentInput");
+            if (input != null)
+            {
+                var subContainer = Container.Resolve<IInjectionContainer>("SubContainer");
+                // Bind current input
+                subContainer.Unbind("CurrentInput");
+                subContainer.Bind<IInput>().To(input).As("CurrentInput");
+            }
             return input;
         }
 
         private IInput CreateAttackInput(InjectionContext context)
         {
             var ray = Camera.main.ScreenPointToRay(UnityEngine.Input.mousePosition);
-            var dist = 50f;
-            var mask = LayerMask.NameToLayer("Enemy");
+            //var dist = 50f;
+            var index = LayerMask.NameToLayer("Enemy");
+            LayerMask mask = 1 << index; 
             RaycastHit hit;
-            if (!Physics.Raycast(ray, out hit, dist, mask))
+            if (!Physics.Raycast(ray, out hit, Mathf.Infinity, mask.value))
                 return null;
             return new AttackInput(hit.transform);
         }
