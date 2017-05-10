@@ -1,6 +1,7 @@
 ﻿using Adic;
 using Adic.Container;
 using Adic.Injection;
+using ThreeK.Game.Helper;
 using UnityEngine;
 
 namespace ThreeK.Game.StateMachine.Input
@@ -21,10 +22,11 @@ namespace ThreeK.Game.StateMachine.Input
 
             if (input != null)
             {
-                var subContainer = Container.Resolve<IInjectionContainer>("SubContainer");
-                // Bind current input
-                subContainer.Unbind("CurrentInput");
-                subContainer.Bind<IInput>().To(input).As("CurrentInput");
+                //var subContainer = Container.Resolve<IInjectionContainer>("SubContainer");
+                //// Bind current input
+                //subContainer.Unbind(BindingHelper.Identifiers.CurrentInput);
+                //subContainer.Bind<IInput>().To(input).As(BindingHelper.Identifiers.CurrentInput);
+                InputHelper.CurrentInput = input;
             }
             return input;
         }

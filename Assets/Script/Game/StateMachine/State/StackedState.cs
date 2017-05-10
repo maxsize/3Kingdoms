@@ -6,7 +6,7 @@ using Adic;
 using Adic.Container;
 using ThreeK.Game.StateMachine.Input;
 using UnityEngine;
-using _3Kingdoms.Game.StateMachine.State;
+using ThreeK.Game.Helper;
 
 namespace ThreeK.Game.StateMachine.State
 {
@@ -22,8 +22,9 @@ namespace ThreeK.Game.StateMachine.State
         }
 
         [Inject]
-        public void PostConstruct([Inject("CurrentInput")] IInput input)
+        public void PostConstruct()
         {
+            var input = InputHelper.CurrentInput;
             if (input != null)
             {
                 _stack.AddRange(CreateStates(input));

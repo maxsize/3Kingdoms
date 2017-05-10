@@ -4,7 +4,6 @@ using System;
 using Adic;
 using ThreeK.Game.StateMachine.Input;
 using Adic.Container;
-using _3Kingdoms.Game.StateMachine.State;
 
 namespace ThreeK.Game.StateMachine.State
 {
@@ -59,8 +58,6 @@ namespace ThreeK.Game.StateMachine.State
             var rigi = Machine.GetComponent<Rigidbody>();
             var animator = Machine.gameObject.GetComponent<Animator>();
 
-            animator.SetBool("Moving", true);
-            animator.SetBool("Running", true);
             rigi.velocity = Vector3.forward * 10;
             while (true)
             {

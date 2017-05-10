@@ -6,8 +6,10 @@ using ThreeK.Game.StateMachine;
 using ThreeK.Game.StateMachine.Input;
 using ThreeK.Game.StateMachine.State;
 using UnityEngine;
+using ThreeK.Game.Helper;
+using UnityEngine.Networking;
 
-[InjectFromContainer("MainContainer")]
+[InjectFromContainer(BindingHelper.Identifiers.MainContainer)]
 public class Player : PushdownAutomation
 {
     [Inject]
@@ -25,9 +27,11 @@ public class Player : PushdownAutomation
 
     void PostConstruct()
     {
+        var networkId = GetComponent<NetworkIdentity>();
+
         _subContainer = Context.AddContainer<InjectionContainer>();
         _subContainer.RegisterExtension<UnityBindingContainerExtension>();
-        MainContainer.Bind<IInjectionContainer>().To(_subContainer).As("SubContainer");
+        MainContainer.Bind<IInjectionContainer>().To(_subContainer).As(networkId.assetId);
 
         _subContainer.Bind<IStateMachine>().To(this)
             .Bind<IState>().To<IdleState>().As(typeof(IdleState))
@@ -41,29 +45,11 @@ public class Player : PushdownAutomation
         AddStates(states.ToArray(), _subContainer.Resolve<IState>(typeof(IdleState)));
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Mouse0))
-        {
-            if (CreateAndHandleInput(typeof(AttackInput))) return;
-            if (CreateAndHandleInput(typeof(MoveInput))) return;
-        }
-    }
-
-    private bool CreateAndHandleInput(Type inputType)
-    {
-        var input = MainContainer.Resolve<IInput>(inputType);
-        if (input != null)
-            HandleInput(input);
-        return input != null;
-    }
-
     protected override void Pop()
     {
         var next = Stack[Stack.Count - 1];
         Stack.Remove(next);         // Pop last state (current state)
-        var input = _subContainer.Resolve<IInput>("CurrentInput");
+        var input = InputHelper.CurrentInput;
         OnStateChange(next, input);    // Update current state
     }
 }

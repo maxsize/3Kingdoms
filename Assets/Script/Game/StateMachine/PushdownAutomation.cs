@@ -6,14 +6,13 @@ using Adic;
 using Adic.Container;
 using ThreeK.Game.StateMachine.Input;
 using ThreeK.Game.StateMachine.State;
+using ThreeK.Game.Helper;
 
 namespace ThreeK.Game.StateMachine
 {
-    [InjectFromContainer("MainContainer")]
+    [InjectFromContainer(BindingHelper.Identifiers.MainContainer)]
     public class PushdownAutomation : StateMachine
     {
-        [Inject("SubContainer")] public IInjectionContainer Container;
-
         protected List<IState> Stack;
 
         [Inject]

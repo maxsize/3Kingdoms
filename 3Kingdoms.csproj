@@ -159,6 +159,9 @@
     <Compile Include="Assets\Script\Game\Behavior\Mover.cs" />
     <Compile Include="Assets\Script\Game\Behavior\Player.cs" />
     <Compile Include="Assets\Script\Game\Behavior\Spinner.cs" />
+    <Compile Include="Assets\Script\Game\Helper\InputHelper.cs" />
+    <Compile Include="Assets\Script\Game\Networking\LocalPlayer.cs" />
+    <Compile Include="Assets\Script\Game\Networking\NetworkUnit.cs" />
     <Compile Include="Assets\Script\Game\StateMachine\IStateMachine.cs" />
     <Compile Include="Assets\Script\Game\StateMachine\Input\AttackInput.cs" />
     <Compile Include="Assets\Script\Game\StateMachine\Input\EmptyInput.cs" />
@@ -170,14 +173,16 @@
     <Compile Include="Assets\Script\Game\StateMachine\PushdownAutomation.cs" />
     <Compile Include="Assets\Script\Game\StateMachine\State\AttackState.cs" />
     <Compile Include="Assets\Script\Game\StateMachine\State\IState.cs" />
-    <Compile Include="Assets\Script\Game\StateMachine\State\IdleState.cs" />
     <Compile Include="Assets\Script\Game\StateMachine\State\IStateStack.cs" />
+    <Compile Include="Assets\Script\Game\StateMachine\State\IdleState.cs" />
     <Compile Include="Assets\Script\Game\StateMachine\State\MonoState.cs" />
+    <Compile Include="Assets\Script\Game\StateMachine\State\Move2TargetState.cs" />
     <Compile Include="Assets\Script\Game\StateMachine\State\MoveState.cs" />
     <Compile Include="Assets\Script\Game\StateMachine\State\StackedState.cs" />
     <Compile Include="Assets\Script\Game\StateMachine\State\State.cs" />
     <Compile Include="Assets\Script\Game\StateMachine\State\TurnState.cs" />
     <Compile Include="Assets\Script\Game\StateMachine\StateMachine.cs" />
+    <Compile Include="Assets\Script\Game\Helper\BindingHelper.cs" />
     <Compile Include="Assets\Script\GameRoot.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

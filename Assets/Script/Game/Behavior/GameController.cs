@@ -1,9 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Adic;
-using ThreeK.Game.StateMachine;
+using UnityEngine.Networking;
+using UnityEngine;
 
 namespace ThreeK.Game.Behavior
 {

@@ -7,7 +7,7 @@ using ThreeK.Game.StateMachine.Input;
 using ThreeK.Game.StateMachine.State;
 using UnityEngine;
 
-namespace _3Kingdoms.Game.StateMachine.State
+namespace ThreeK.Game.StateMachine.State
 {
     public abstract class MonoState : ThreeK.Game.StateMachine.State.State
     {
