@@ -17,6 +17,7 @@ public class GameRoot : ContextRoot
         _container.RegisterExtension<UnityBindingContainerExtension>()
             .RegisterExtension<CommanderContainerExtension>()
             .RegisterExtension<EventCallerContainerExtension>()
+            .Bind<NetworkManager>().ToGameObject("NetworkManager")
             .Bind<IInput>().ToFactory<InputFactory>().As(typeof(MoveInput))
             .Bind<IStateMachine>().ToPrefab<Player>("Warrior3/Hammer/Prefabs/Hammer").As("Hammer")
             .Bind<IStateMachine>().ToPrefab<Player>("Warrior3/Crossbow/Prefabs/Crossbow").As("Crossbow")
