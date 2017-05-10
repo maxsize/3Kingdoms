@@ -9,11 +9,13 @@ namespace ThreeK.Game.Behavior
 {
     public class GameController
     {
-        private IStateMachine _player;
+        //private IStateMachine _player;
 
-        public GameController([Inject("Crossbow")] IStateMachine player)
+        public GameController(NetworkManager networkManager)
         {
-            _player = player;
+            var crossbow = Resources.Load("Warrior3/Crossbow/Prefabs/Crossbow") as GameObject;
+            //crossbow.AddComponent<LocalPlayer>();
+            networkManager.playerPrefab = crossbow;
         }
     }
 }
