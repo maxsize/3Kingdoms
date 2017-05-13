@@ -154,11 +154,15 @@
     <Compile Include="Assets\Script\Adic\Framework\Util\MethodUtils.cs" />
     <Compile Include="Assets\Script\Adic\Framework\Util\TypeUtils.cs" />
     <Compile Include="Assets\Script\Game\Behavior\Core\InjectableBehaviour.cs" />
-    <Compile Include="Assets\Script\Game\Behavior\Follower.cs" />
+    <Compile Include="Assets\Script\Game\Behavior\Core\MovementBehaviour.cs" />
+    <Compile Include="Assets\Script\Game\Behavior\Movement\Attacker.cs" />
+    <Compile Include="Assets\Script\Game\Behavior\Movement\Follower.cs" />
     <Compile Include="Assets\Script\Game\Behavior\GameController.cs" />
-    <Compile Include="Assets\Script\Game\Behavior\Mover.cs" />
+    <Compile Include="Assets\Script\Game\Behavior\Movement\Mover.cs" />
+    <Compile Include="Assets\Script\Game\Behavior\Movement\Mover2.cs" />
+    <Compile Include="Assets\Script\Game\Behavior\Movement\Stander.cs" />
     <Compile Include="Assets\Script\Game\Behavior\Player.cs" />
-    <Compile Include="Assets\Script\Game\Behavior\Spinner.cs" />
+    <Compile Include="Assets\Script\Game\Behavior\Movement\Spinner.cs" />
     <Compile Include="Assets\Script\Game\Helper\InputHelper.cs" />
     <Compile Include="Assets\Script\Game\Networking\LocalPlayer.cs" />
     <Compile Include="Assets\Script\Game\Networking\NetworkUnit.cs" />
@@ -175,7 +179,6 @@
     <Compile Include="Assets\Script\Game\StateMachine\State\IState.cs" />
     <Compile Include="Assets\Script\Game\StateMachine\State\IStateStack.cs" />
     <Compile Include="Assets\Script\Game\StateMachine\State\IdleState.cs" />
-    <Compile Include="Assets\Script\Game\StateMachine\State\MonoState.cs" />
     <Compile Include="Assets\Script\Game\StateMachine\State\Move2TargetState.cs" />
     <Compile Include="Assets\Script\Game\StateMachine\State\MoveState.cs" />
     <Compile Include="Assets\Script\Game\StateMachine\State\StackedState.cs" />
@@ -185,6 +188,7 @@
     <Compile Include="Assets\Script\Game\Helper\BindingHelper.cs" />
     <Compile Include="Assets\Script\GameRoot.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />
 </Project>

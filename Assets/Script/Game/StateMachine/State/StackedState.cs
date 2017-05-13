@@ -10,15 +10,20 @@ using ThreeK.Game.Helper;
 
 namespace ThreeK.Game.StateMachine.State
 {
-    public class StackedState : MonoState, IStateStack
+    public class StackedState : State, IStateStack
     {
         [Inject]
         public IInjectionContainer Container;
 
         private List<IState> _stack;
-        public StackedState(IStateMachine stateMachine) : base(stateMachine as MonoBehaviour)
+        public StackedState()
         {
             _stack = new List<IState>();
+        }
+
+        public override object Data
+        {
+            get { return null; }
         }
 
         [Inject]

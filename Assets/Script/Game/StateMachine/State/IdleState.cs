@@ -7,21 +7,17 @@ using Adic.Container;
 
 namespace ThreeK.Game.StateMachine.State
 {
-    public class IdleState : MonoState
+    public class IdleState : State
     {
         [Inject] public IInjectionContainer Container;
 
-        public IdleState(IStateMachine stateMachine) : base(stateMachine as MonoBehaviour)
+        public IdleState()
         {
         }
 
-        public override void Enter(IInput input)
+        public override object Data
         {
-            base.Enter(input);
-
-            var animator = Machine.GetComponent<Animator>();
-            animator.SetBool("Moving", false);
-            animator.SetBool("Running", false);
+            get { return null; }
         }
 
         public override IState HandleInput(IInput input)

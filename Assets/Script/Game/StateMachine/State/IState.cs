@@ -6,8 +6,6 @@ namespace ThreeK.Game.StateMachine.State
 {
     public interface IState
     {
-        UnityEvent OnStateEnter { get; }
-        UnityEvent OnStateExit { get; }
         /// <summary>
         /// Handle input and returns next state.
         /// </summary>
@@ -15,7 +13,7 @@ namespace ThreeK.Game.StateMachine.State
         /// <param name="input">Input</param>
         /// <returns></returns>
         IState HandleInput(IInput input);
-        void Enter(IInput input);
+        object Data { get; }
     }
 }
 

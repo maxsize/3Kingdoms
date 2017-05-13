@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ThreeK.Game.StateMachine.Input;
+﻿using ThreeK.Game.Helper;
 using UnityEngine;
 
 namespace ThreeK.Game.StateMachine.State
@@ -11,25 +7,14 @@ namespace ThreeK.Game.StateMachine.State
     {
         private Transform _target;
 
-        public Move2TargetState(IStateMachine stateMachine) : base(stateMachine)
+        public Move2TargetState()
         {
+            _target = (Transform)InputHelper.CurrentInput.Data;
         }
 
-        protected override Vector3 GetDestination(IInput input)
+        public override object Data
         {
-            if (!(input.Data is Transform))
-                return Machine.transform.position;
-
-            _target = (Transform) input.Data;
-            return _target.position;
-        }
-
-        protected override bool IsReached()
-        {
-            var trans = Machine.transform;
-            var dist = Vector3.Distance(trans.position, _target.position);
-            Debug.Log(string.Format("{0} {1} {2}", dist, trans.position, _target.position));
-            return dist < 2;
+            get { return _target.position; }
         }
     }
 }

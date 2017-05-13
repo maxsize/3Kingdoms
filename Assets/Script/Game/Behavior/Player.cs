@@ -19,9 +19,8 @@ public class Player : PushdownAutomation
 
     private IInjectionContainer _subContainer;
 
-    protected override void Start()
+    private void Start()
     {
-        base.Start();
         PostConstruct();
     }
 
@@ -43,13 +42,5 @@ public class Player : PushdownAutomation
 
         List<IState> states = new List<IState> { };
         AddStates(states.ToArray(), _subContainer.Resolve<IState>(typeof(IdleState)));
-    }
-
-    protected override void Pop()
-    {
-        var next = Stack[Stack.Count - 1];
-        Stack.Remove(next);         // Pop last state (current state)
-        var input = InputHelper.CurrentInput;
-        OnStateChange(next, input);    // Update current state
     }
 }

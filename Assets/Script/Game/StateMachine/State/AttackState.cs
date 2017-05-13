@@ -3,35 +3,29 @@ using System.Collections;
 using System;
 using Adic;
 using ThreeK.Game.StateMachine.Input;
+using ThreeK.Game.Helper;
 
 namespace ThreeK.Game.StateMachine.State
 {
-    public class AttackState : MonoState
+    public class AttackState : State
     {
         private const string ATTACK1_TRIGGER = "Attack1Trigger";
 
-        public AttackState(IStateMachine stateMachine) : base(stateMachine as MonoBehaviour)
+        private Transform _data;
+
+        public AttackState()
         {
+            _data = (Transform)InputHelper.CurrentInput.Data;
         }
 
-        public override void Enter(IInput input)
+        public override object Data
         {
-            base.Enter(input);
-
-            var animator = Machine.GetComponent<Animator>();
-            animator.SetTrigger(ATTACK1_TRIGGER);
-            StartCoroutine(Wait(1.2f));
+            get { return _data; }
         }
 
         public override IState HandleInput(IInput input)
         {
             return this;
-        }
-
-        private IEnumerator Wait(float duration)
-        {
-            yield return new WaitForSeconds(duration);
-            OnStateExit.Invoke();
         }
     }
 }

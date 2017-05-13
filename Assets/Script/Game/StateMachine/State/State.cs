@@ -8,18 +8,10 @@ namespace ThreeK.Game.StateMachine.State
 {
     public abstract class State : IState
     {
-        public UnityEvent OnStateEnter { get; private set; }
-        public UnityEvent OnStateExit { get; private set; }
+        public abstract object Data { get; }
 
         protected State()
         {
-            OnStateEnter = new UnityEvent();
-            OnStateExit = new UnityEvent();
-        }
-
-        public virtual void Enter(IInput input)
-        {
-            OnStateEnter.Invoke();
         }
 
         public abstract IState HandleInput(IInput input);

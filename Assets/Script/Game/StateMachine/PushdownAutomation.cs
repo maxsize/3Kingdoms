@@ -16,9 +16,8 @@ namespace ThreeK.Game.StateMachine
         protected List<IState> Stack;
 
         [Inject]
-        public override void Construct()
+        public void Construct()
         {
-            base.Construct();
             Stack = new List<IState>();
         }
 
@@ -35,26 +34,19 @@ namespace ThreeK.Game.StateMachine
                 Stack.Remove(next);
             }
 
-            OnStateChange(next, input);
+            ChangeState(next);
 
             return next;
         }
 
-        protected virtual void OnStateChange(IState newState, IInput input)
+        public bool NextState()
         {
-            CurrentState = newState;
-            newState.Enter(input);
-            newState.OnStateExit.AddListener(OnStateExit);
-        }
-
-        private void OnStateExit()
-        {
-            CurrentState.OnStateExit.RemoveListener(OnStateExit);
-            Pop();
-        }
-
-        protected virtual void Pop()
-        {
+            if (Stack.Count == 0)
+                return false;
+            var next = Stack[Stack.Count - 1];
+            Stack.Remove(next);         // Pop last state (current state)
+            ChangeState(next);    // Update current state
+            return true;
         }
     }
 }
