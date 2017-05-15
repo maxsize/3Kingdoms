@@ -13,13 +13,11 @@
     <TargetFrameworkIdentifier>.NETFramework</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>Unity Subset v3.5</TargetFrameworkProfile>
-    <CompilerResponseFile>
-    </CompilerResponseFile>
+    <CompilerResponseFile></CompilerResponseFile>
     <UnityProjectType>Game:1</UnityProjectType>
     <UnityBuildTarget>StandaloneWindows:5</UnityBuildTarget>
     <UnityVersion>5.5.0f3</UnityVersion>
-    <RootNamespace>
-    </RootNamespace>
+    <RootNamespace></RootNamespace>
     <LangVersion>4</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -155,14 +153,15 @@
     <Compile Include="Assets\Script\Adic\Framework\Util\TypeUtils.cs" />
     <Compile Include="Assets\Script\Game\Behavior\Core\InjectableBehaviour.cs" />
     <Compile Include="Assets\Script\Game\Behavior\Core\MovementBehaviour.cs" />
+    <Compile Include="Assets\Script\Game\Behavior\GameController.cs" />
     <Compile Include="Assets\Script\Game\Behavior\Movement\Attacker.cs" />
     <Compile Include="Assets\Script\Game\Behavior\Movement\Follower.cs" />
-    <Compile Include="Assets\Script\Game\Behavior\GameController.cs" />
     <Compile Include="Assets\Script\Game\Behavior\Movement\Mover.cs" />
     <Compile Include="Assets\Script\Game\Behavior\Movement\Mover2.cs" />
+    <Compile Include="Assets\Script\Game\Behavior\Movement\Spinner.cs" />
     <Compile Include="Assets\Script\Game\Behavior\Movement\Stander.cs" />
     <Compile Include="Assets\Script\Game\Behavior\Player.cs" />
-    <Compile Include="Assets\Script\Game\Behavior\Movement\Spinner.cs" />
+    <Compile Include="Assets\Script\Game\Helper\BindingHelper.cs" />
     <Compile Include="Assets\Script\Game\Helper\InputHelper.cs" />
     <Compile Include="Assets\Script\Game\Networking\LocalPlayer.cs" />
     <Compile Include="Assets\Script\Game\Networking\NetworkUnit.cs" />
@@ -179,16 +178,15 @@
     <Compile Include="Assets\Script\Game\StateMachine\State\IState.cs" />
     <Compile Include="Assets\Script\Game\StateMachine\State\IStateStack.cs" />
     <Compile Include="Assets\Script\Game\StateMachine\State\IdleState.cs" />
+    <Compile Include="Assets\Script\Game\StateMachine\State\MonoState.cs" />
     <Compile Include="Assets\Script\Game\StateMachine\State\Move2TargetState.cs" />
     <Compile Include="Assets\Script\Game\StateMachine\State\MoveState.cs" />
     <Compile Include="Assets\Script\Game\StateMachine\State\StackedState.cs" />
     <Compile Include="Assets\Script\Game\StateMachine\State\State.cs" />
     <Compile Include="Assets\Script\Game\StateMachine\State\TurnState.cs" />
     <Compile Include="Assets\Script\Game\StateMachine\StateMachine.cs" />
-    <Compile Include="Assets\Script\Game\Helper\BindingHelper.cs" />
     <Compile Include="Assets\Script\GameRoot.cs" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />
 </Project>
