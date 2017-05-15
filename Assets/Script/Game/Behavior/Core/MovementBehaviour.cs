@@ -8,11 +8,10 @@ namespace ThreeK.Game.Behavior.Core
     [RequireComponent(typeof(Rigidbody))]
     public class MovementBehaviour : MonoBehaviour
     {
-        public UnityEvent OnEnd;
+        public UnityEvent OnEnd = new UnityEvent();
 
         protected virtual void Start()
         {
-            OnEnd = new UnityEvent();
         }
 
         public virtual void SetTarget(object target)
@@ -21,6 +20,7 @@ namespace ThreeK.Game.Behavior.Core
             if (target is Vector3) SetTarget((Vector3)target);
             if (target is Transform) SetTarget((Transform)target);
             if (target == null) SetTarget();
+            enabled = true;
         }
 
         public virtual void SetTarget()
