@@ -18,5 +18,6 @@ public class Attacker : MovementBehaviour
     {
         yield return new WaitForSeconds(duration);
         OnEnd.Invoke();
+        enabled = false;
     }
 }

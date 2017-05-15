@@ -38,6 +38,15 @@ namespace ThreeK.Game.Behavior.Movement
         {
             if (IsReached())
             {
+                EndMove();
+                enabled = false;
+            }
+        }
+
+        private void EndMove()
+        {
+            if (_animator)
+            {
                 _animator.SetBool("Moving", false);
                 _animator.SetBool("Running", false);
                 _rigid.velocity = Vector3.zero;
