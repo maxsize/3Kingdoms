@@ -21,9 +21,10 @@ public class Player : PushdownAutomation
 
     private void Start()
     {
+        this.Inject();
         PostConstruct();
     }
-
+    
     void PostConstruct()
     {
         var networkId = GetComponent<NetworkIdentity>();

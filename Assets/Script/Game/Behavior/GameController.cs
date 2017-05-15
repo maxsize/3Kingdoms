@@ -1,11 +1,14 @@
-using UnityEngine.Networking;
+using Adic;
+using Adic.Container;
+using ThreeK.Game.Networking;
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace ThreeK.Game.Behavior
 {
     public class GameController
     {
-        //private IStateMachine _player;
+        [Inject] public IInjectionContainer Container;
 
         public GameController(NetworkManager networkManager)
         {
