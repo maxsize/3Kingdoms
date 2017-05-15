@@ -12,16 +12,12 @@ namespace ThreeK.Game.StateMachine
     {
         public IState CurrentState { get; protected set; }
 
-        public StateChangeEvent OnStateChange { get; private set; }
-
-        private List<IState> _states;
-
-        private void Start()
-        {
-            this.Inject();
-            _states = new List<IState>();
-            OnStateChange = new StateChangeEvent();
+        public StateChangeEvent OnStateChange {
+            get { return _onStateChange; }
         }
+
+        private readonly StateChangeEvent _onStateChange = new StateChangeEvent();
+        private List<IState> _states = new List<IState>();
 
         public virtual void AddStates(IState[] states, IState defaultState)
         {

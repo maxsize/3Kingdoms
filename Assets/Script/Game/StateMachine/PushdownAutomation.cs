@@ -1,9 +1,5 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Adic;
-using Adic.Container;
 using ThreeK.Game.StateMachine.Input;
 using ThreeK.Game.StateMachine.State;
 using ThreeK.Game.Helper;
@@ -24,7 +20,8 @@ namespace ThreeK.Game.StateMachine
         public override IState HandleInput(IInput input)
         {
             var oldState = CurrentState;
-            Stack.Add(oldState);
+            if (Stack.Count == 0)
+                Stack.Add(oldState);    // Only keep the last state (idle state)
 
             var next = CurrentState.HandleInput(input);
             if (next is IStateStack)
@@ -35,7 +32,6 @@ namespace ThreeK.Game.StateMachine
             }
 
             ChangeState(next);
-
             return next;
         }
 
