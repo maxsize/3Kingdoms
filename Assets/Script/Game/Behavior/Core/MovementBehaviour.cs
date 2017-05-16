@@ -16,28 +16,33 @@ namespace ThreeK.Game.Behavior.Core
 
         public virtual void SetTarget(object target)
         {
-            if (target is Quaternion) SetTarget((Quaternion)target);
-            if (target is Vector3) SetTarget((Vector3)target);
-            if (target is Transform) SetTarget((Transform)target);
+            SetTarget(target, 0);
+        }
+
+        public virtual void SetTarget(object target, float latency)
+        {
+            if (target is Quaternion) SetTarget((Quaternion)target, latency);
+            if (target is Vector3) SetTarget((Vector3)target, latency);
+            if (target is Transform) SetTarget((Transform)target, latency);
             if (target == null) SetTarget();
             enabled = true;
         }
 
-        public virtual void SetTarget()
+        protected virtual void SetTarget()
         {
         }
 
-        public virtual void SetTarget(Quaternion target)
-        {
-            throw new NotImplementedException();
-        }
-
-        public virtual void SetTarget(Vector3 target)
+        protected virtual void SetTarget(Quaternion target, float latency)
         {
             throw new NotImplementedException();
         }
 
-        public virtual void SetTarget(Transform target)
+        protected virtual void SetTarget(Vector3 target, float latency)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected virtual void SetTarget(Transform target, float latency)
         {
             throw new NotImplementedException();
         }
