@@ -33,12 +33,12 @@ namespace ThreeK.Game.Networking
                 gameObject.AddComponent<LocalPlayer>();
             }
             if (IsHost)
-                NetworkServer.RegisterHandler(MsgType.Animation, OnClientToServer);
+                NetworkServer.RegisterHandler(NetworkUnitMessage.MessageType, OnClientToServer);
             else if (isClient)
             {
                 _client = new NetworkClient();
                 _client.RegisterHandler(MsgType.Connect, OnConnect);
-                _client.RegisterHandler(MsgType.Animation, onAnim);
+                _client.RegisterHandler(NetworkUnitMessage.MessageType, OnAnim);
                 _client.Connect("localhost", 7777);
             }
         }
@@ -49,7 +49,7 @@ namespace ThreeK.Game.Networking
             StartMovement(data);
         }
 
-        private void StartMovement(object data)
+        private void StartMovement(object data, float latency = 0.0f)
         {
             if (_currentMovement != null)
                 _currentMovement.OnEnd.RemoveListener(OnStateEnd);
@@ -70,7 +70,7 @@ namespace ThreeK.Game.Networking
             if (m != null)
             {
                 m.OnEnd.AddListener(OnStateEnd);
-                m.SetTarget(data);
+                m.SetTarget(data, latency);
                 _currentMovement = m;
                 Sync(data);
             }
@@ -78,6 +78,10 @@ namespace ThreeK.Game.Networking
 
         private void Sync(object data)
         {
+            // Only local player should send message (clients should not send it)
+            if (!isLocalPlayer)
+                return;
+            
             var msg = new NetworkUnitMessage()
             {
                 Position = transform.position,
@@ -101,12 +105,13 @@ namespace ThreeK.Game.Networking
             SendMessage(msg);
         }
 
-        void SendMessage(MessageBase msg)
+        void SendMessage(NetworkUnitMessage msg)
         {
+            msg.Timestamp = NetworkTransport.GetNetworkTimestamp();     // Add timestamp
             if (IsHost)
-                NetworkServer.SendToAll(MsgType.Animation, msg);
+                NetworkServer.SendToAll(NetworkUnitMessage.MessageType, msg);
             else
-                _client.Send(MsgType.Animation, msg);
+                _client.Send(NetworkUnitMessage.MessageType, msg);
         }
 
         private void OnStateEnd()
@@ -129,15 +134,24 @@ namespace ThreeK.Game.Networking
 
         private void OnClientToServer(NetworkMessage netMsg)
         {
+            // Sender on server side will receive this message
             // When server receives messages, sync movement and send to all the clients
             var msg = netMsg.ReadMessage<NetworkUnitMessage>();
-            SyncClientObject(msg);
-            NetworkServer.SendToAll(MsgType.Animation, msg);
+            var latency = GetLatency(netMsg.conn, msg.Timestamp);
+            SyncClientObject(msg, latency);
+            msg.Timestamp -= latency;   // Add current message delay and send to everyone
+            SendMessage(msg);
+            //var keys = NetworkServer.objects;
+            //foreach (KeyValuePair<NetworkInstanceId, NetworkIdentity> pair in keys)
+            //{
+            //    if (msg.NetId == pair.Key) continue;
+            //    NetworkServer.SendToClient(pair.Value.connectionToClient.connectionId, NetworkUnitMessage.MessageType, msg);
+            //}
         }
 
-        private void SyncClientObject(NetworkUnitMessage msg)
+        private void SyncClientObject(NetworkUnitMessage msg, float latency)
         {
-            var clientObj = isServer ? 
+            var clientObj = isServer ?
                 NetworkServer.FindLocalObject(msg.NetId) :
                 ClientScene.FindLocalObject(msg.NetId);
             if (clientObj == null)
@@ -146,24 +160,37 @@ namespace ThreeK.Game.Networking
                 return;
             }
             var unit = clientObj.GetComponent<NetworkUnit>();
-            unit.StartMovement(msg.GetData());
+            if (unit.isLocalPlayer) return;     // This is the sender it self
+            unit.StartMovement(msg.GetData(), latency);
         }
 
         private void OnConnect(NetworkMessage netMsg)
         {
         }
 
-        private void onAnim(NetworkMessage netMsg)
+        private void OnAnim(NetworkMessage netMsg)
         {
             // When client receives messages, just sync movement and no further message will be sent
             var msg = netMsg.ReadMessage<NetworkUnitMessage>();
-            if (msg.NetId == netId) return;     // Don't sync self
-            SyncClientObject(msg);
+            var latency = GetLatency(netMsg.conn, msg.Timestamp);
+            //if (isServer) return;
+            if (msg.NetId == netId) return;     // Don't sync the sender it self
+            SyncClientObject(msg, latency);
+        }
+
+        private int GetLatency(NetworkConnection conn, int remoteTimestamp)
+        {
+            byte error;
+            var delay = NetworkTransport.GetRemoteDelayTimeMS(conn.hostId, conn.connectionId, remoteTimestamp, out error);
+            Debug.Log("Latency: " + delay);
+            return delay / 1000;
         }
     }
 
     public class NetworkUnitMessage : MessageBase
     {
+        public static short MessageType = MsgType.Highest + 1;
+
         public enum SyncType
         {
             Rotate,
@@ -178,6 +205,7 @@ namespace ThreeK.Game.Networking
         public Quaternion Rotation;
         public Vector3 Velocity;
         public NetworkInstanceId Target;
+        public int Timestamp;
 
         public object GetData()
         {
