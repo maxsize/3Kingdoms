@@ -57,9 +57,9 @@ namespace ThreeK.Game.Networking
             MovementBehaviour m = null;
             if (data is Quaternion)
                 m = GetMovement(typeof(Spinner));
-            if (data is Vector3)
+            else if (data is Vector3)
                 m = GetMovement(typeof(Mover));
-            if (data is Transform)
+            else if (data is Transform)
             {
                 var t = data as Transform;
                 if (Vector3.Distance(t.position, transform.position) <= 2)
@@ -67,6 +67,9 @@ namespace ThreeK.Game.Networking
                 else
                     m = GetMovement(typeof(Mover2));
             }
+            else if (data == null)
+                m = GetMovement(typeof(Stander));
+
             if (m != null)
             {
                 m.OnEnd.AddListener(OnStateEnd);
@@ -81,27 +84,12 @@ namespace ThreeK.Game.Networking
             // Only local player should send message (clients should not send it)
             if (!isLocalPlayer)
                 return;
-            
             var msg = new NetworkUnitMessage()
             {
                 Position = transform.position,
                 NetId = netId
             };
-            if (data is Vector3)
-            {
-                msg.Velocity = (Vector3)data;
-                msg.Type = NetworkUnitMessage.SyncType.Move;
-            }
-            else if (data is Quaternion)
-            {
-                msg.Rotation = (Quaternion)data;
-                msg.Type = NetworkUnitMessage.SyncType.Rotate;
-            }
-            else if (data is NetworkInstanceId)
-            {
-                msg.Target = (NetworkInstanceId)data;
-                msg.Type = NetworkUnitMessage.SyncType.Follow;
-            }
+            msg.SetData(data);
             SendMessage(msg);
         }
 
@@ -196,7 +184,8 @@ namespace ThreeK.Game.Networking
             Rotate,
             Move,
             Follow,
-            Attack
+            Attack,
+            Idle
         }
 
         public SyncType Type;
@@ -206,6 +195,29 @@ namespace ThreeK.Game.Networking
         public Vector3 Velocity;
         public NetworkInstanceId Target;
         public int Timestamp;
+
+        public void SetData(object data)
+        {
+            if (data is Vector3)
+            {
+                Velocity = (Vector3)data;
+                Type = SyncType.Move;
+            }
+            else if (data is Quaternion)
+            {
+                Rotation = (Quaternion)data;
+                Type = SyncType.Rotate;
+            }
+            else if (data is NetworkInstanceId)
+            {
+                Target = (NetworkInstanceId)data;
+                Type = SyncType.Follow;
+            }
+            else if (data == null)
+            {
+                Type = SyncType.Idle;
+            }
+        }
 
         public object GetData()
         {
