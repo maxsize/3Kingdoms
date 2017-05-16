@@ -6,9 +6,8 @@ public class Attacker : MovementBehaviour
 {
     private const string ATTACK1_TRIGGER = "Attack1Trigger";
 
-    public override void SetTarget(Transform target)
+    protected override void SetTarget(Transform target, float latency)
     {
-
         var animator = GetComponent<Animator>();
         animator.SetTrigger(ATTACK1_TRIGGER);
         StartCoroutine(Wait(1.2f));

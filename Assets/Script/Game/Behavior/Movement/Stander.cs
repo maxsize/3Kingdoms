@@ -5,7 +5,7 @@ using ThreeK.Game.Behavior.Core;
 public class Stander : MovementBehaviour
 {
 
-    public override void SetTarget()
+    protected override void SetTarget()
     {
         var animator = GetComponent<Animator>();
         animator.SetBool("Moving", false);

@@ -11,9 +11,10 @@ namespace ThreeK.Game.Behavior.Movement
         private Rigidbody _rigid;
         private Animator _animator;
 
-        public override void SetTarget(Vector3 target)
+        protected override void SetTarget(Vector3 target, float latency)
         {
             _target = target;
+            transform.Translate(Vector3.forward * latency);
             StartMovement();
         }
 

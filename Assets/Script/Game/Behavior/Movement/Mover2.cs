@@ -7,9 +7,10 @@ namespace ThreeK.Game.Behavior.Movement
     {
         private Transform _targetTrans;
 
-        public override void SetTarget(Transform target)
+        protected override void SetTarget(Transform target, float latency)
         {
             _targetTrans = target;
+            transform.Translate(Vector3.forward * latency);
             StartMovement();
         }
 
