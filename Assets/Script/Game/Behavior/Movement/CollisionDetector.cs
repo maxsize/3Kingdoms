@@ -19,31 +19,16 @@ namespace Game.Behavior.Movement
 
         private RaycastHit _hitInfo;
         private Ray _ray;
-        private Vector3 _firstHit = Vector3.zero;
 
         private void Start()
         {
             this.Inject();
         }
 
-        private void Update()
-        {
-            if (_firstHit != Vector3.zero)
-                transform.position = _firstHit;
-        }
-
         private void FixedUpdate()
         {
             if (IsCollidingVertically())
-            {
-                if (_firstHit == Vector3.zero)
-                    _firstHit = transform.position;
                 Dispatcher.DispatchWith<CollideEvent>(transform.position);
-            }
-            else
-            {
-                _firstHit = Vector3.zero;
-            }
         }
 
         bool IsCollidingVertically()

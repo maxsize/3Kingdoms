@@ -18,7 +18,14 @@ namespace ThreeK.Game.Behavior.Movement
         {
             var dist = Vector3.Distance(transform.position, _targetTrans.position);
             //Debug.Log(string.Format("{0} {1} {2}", dist, trans.position, _target));
-            return dist < 1;
+            if (dist < 1)
+            {
+                // Close to target, stop running animation
+                var animator = GetComponent<Animator>();
+                animator.SetBool("Moving", false);
+                animator.SetBool("Running", false);
+            }
+            return dist < Threashold;
         }
     }
 }

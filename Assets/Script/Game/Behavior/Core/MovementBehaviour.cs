@@ -38,6 +38,13 @@ namespace ThreeK.Game.Behavior.Core
             Dispatcher.DispatchWith<TargetChangeEvent>(GetType().Name);
         }
 
+        /// <summary>
+        /// Will be called before switch to next movement
+        /// </summary>
+        public virtual void End()
+        {
+        }
+
         protected virtual void SetTarget()
         {
         }

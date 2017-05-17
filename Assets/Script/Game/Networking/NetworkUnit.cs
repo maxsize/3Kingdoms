@@ -57,7 +57,11 @@ namespace ThreeK.Game.Networking
         private void StartMovement(object data, float latency = 0.0f)
         {
             if (_currentMovement != null)
+            {
+                _currentMovement.End();
                 _currentMovement.OnEnd.RemoveListener(OnStateEnd);
+                _currentMovement.enabled = false;
+            }
 
             MovementBehaviour m = null;
             if (data is Quaternion)

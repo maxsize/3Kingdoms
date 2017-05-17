@@ -11,14 +11,24 @@ namespace ThreeK.Game.Behavior.Movement
 {
     public class Mover : MovementBehaviour
     {
-        public float Speed = 7f;
+        public float Threashold = 0.2f;
+        public float WalkSpeed = 2f;
+        public float RunSpeed = 5f;
+        public float TurnSpeed = 400f;
+
+        private float Speed = 5f;
         private Vector3 _target;
-        
+        private Animator _animator;
+
         protected override void SetTarget(Vector3 target, float latency)
         {
+            if (_animator == null)
+                _animator = GetComponent<Animator>();
             AddListener();
             _target = target;
-            transform.Translate(Vector3.forward * 10 * latency);
+            // Make sure facing the right direction
+            transform.rotation = Quaternion.LookRotation(_target - transform.position);
+            transform.Translate(Vector3.forward * Speed * latency);
             StartMovement();
         }
 
@@ -27,14 +37,21 @@ namespace ThreeK.Game.Behavior.Movement
             var trans = transform;
             var dist = Vector3.Distance(trans.position, _target);
             //Debug.Log(string.Format("{0} {1} {2}", dist, trans.position, _target));
-            return dist < 1;
+            if (dist < 1)
+            {
+                // Close to target, stop running animation
+                Speed = WalkSpeed;
+                _animator.SetBool("Moving", false);
+                _animator.SetBool("Running", false);
+            }
+            return dist < Threashold;
         }
 
         protected void StartMovement()
         {
-            var animator = GetComponent<Animator>();
-            animator.SetBool("Moving", true);
-            animator.SetBool("Running", true);
+            Speed = RunSpeed;
+            _animator.SetBool("Moving", true);
+            _animator.SetBool("Running", true);
         }
 
         private void OnDisable()
@@ -48,7 +65,8 @@ namespace ThreeK.Game.Behavior.Movement
             if (IsReached())
             {
                 EndMove();
-                transform.position = _target - transform.forward;   // Correct the final position
+                Debug.Log(transform.position + " - " + _target + " - " + Vector3.Distance(transform.position, _target));
+                transform.position = _target;   // Correct the final position
                 enabled = false;
             }
         }

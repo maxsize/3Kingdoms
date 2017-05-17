@@ -11,6 +11,7 @@ namespace ThreeK.Game.Behavior.Movement
         public float TurnSpeed = 400f;
 
         private Quaternion _targetQuaternion;
+        private Vector3 _position = Vector3.zero;
 
         /// <summary>
         /// Set target and start to turn to the target
@@ -29,6 +30,8 @@ namespace ThreeK.Game.Behavior.Movement
         private void FixedUpdate()
         {
             TurnToTarget(Time.fixedDeltaTime);
+            if (_position != Vector3.zero)
+                transform.position = _position;
         }
 
         private void TurnToTarget(float delta)
