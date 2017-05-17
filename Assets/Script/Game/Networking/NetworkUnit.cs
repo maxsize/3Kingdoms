@@ -84,6 +84,7 @@ namespace ThreeK.Game.Networking
             // Only local player should send message (clients should not send it)
             if (!isLocalPlayer)
                 return;
+
             var msg = new NetworkUnitMessage()
             {
                 Position = transform.position,
