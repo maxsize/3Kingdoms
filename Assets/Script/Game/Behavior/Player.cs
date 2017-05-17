@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Adic;
 using Adic.Container;
+using Game.Event;
 using ThreeK.Game.StateMachine;
 using ThreeK.Game.StateMachine.Input;
 using ThreeK.Game.StateMachine.State;
@@ -29,11 +30,12 @@ public class Player : PushdownAutomation
     {
         var networkId = GetComponent<NetworkIdentity>();
 
-        _subContainer = Context.AddContainer<InjectionContainer>();
+        _subContainer = Context.AddContainer<InjectionContainer>(BindingHelper.Identifiers.PlayerContainer);
         _subContainer.RegisterExtension<UnityBindingContainerExtension>();
         MainContainer.Bind<IInjectionContainer>().To(_subContainer).As(networkId.assetId);
 
         _subContainer.Bind<IStateMachine>().To(this)
+            .Bind<EventDispatcher>().ToSingleton()
             .Bind<IState>().To<IdleState>().As(typeof(IdleState))
             .Bind<IState>().To<MoveState>().As(typeof(MoveState))
             .Bind<IState>().To<TurnState>().As(typeof(TurnState))

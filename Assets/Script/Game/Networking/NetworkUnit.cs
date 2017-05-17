@@ -7,6 +7,8 @@ using ThreeK.Game.StateMachine.State;
 using ThreeK.Game.Behavior.Core;
 using System.Collections.Generic;
 using System.Linq;
+using Game.Behavior.Anim;
+using Game.Behavior.Movement;
 using ThreeK.Game.Behavior.Movement;
 
 namespace ThreeK.Game.Networking
@@ -31,6 +33,9 @@ namespace ThreeK.Game.Networking
                 _stateMachine = gameObject.AddComponent<Player>();
                 _stateMachine.OnStateChange.AddListener(OnStateChange);
                 gameObject.AddComponent<LocalPlayer>();
+                //GetComponent<Rigidbody>().isKinematic = false;
+                //GetComponent<Rigidbody>().mass = float.MaxValue;
+                GetComponent<CollisionDetector>().enabled = true;
             }
             if (IsHost)
                 NetworkServer.RegisterHandler(NetworkUnitMessage.MessageType, OnClientToServer);

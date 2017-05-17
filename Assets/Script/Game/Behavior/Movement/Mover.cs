@@ -1,20 +1,24 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Adic;
+using Game.Behavior.Movement;
+using Game.Event;
 using ThreeK.Game.Behavior.Core;
+using ThreeK.Game.Networking;
 using UnityEngine;
 
 namespace ThreeK.Game.Behavior.Movement
 {
-    public class Mover : MovementBehaviour {
-
+    public class Mover : MovementBehaviour
+    {
+        public float Speed = 7f;
         private Vector3 _target;
-        private Rigidbody _rigid;
-        private Animator _animator;
-
+        
         protected override void SetTarget(Vector3 target, float latency)
         {
+            AddListener();
             _target = target;
-            transform.Translate(Vector3.forward * latency);
+            transform.Translate(Vector3.forward * 10 * latency);
             StartMovement();
         }
 
@@ -28,31 +32,50 @@ namespace ThreeK.Game.Behavior.Movement
 
         protected void StartMovement()
         {
-            _rigid = GetComponent<Rigidbody>();
-            _rigid.velocity = Vector3.forward * 10;
-            _animator = GetComponent<Animator>();
-            _animator.SetBool("Moving", true);
-            _animator.SetBool("Running", true);
+            var animator = GetComponent<Animator>();
+            animator.SetBool("Moving", true);
+            animator.SetBool("Running", true);
+        }
+
+        private void OnDisable()
+        {
+            RemoveListener();
         }
 
         private void FixedUpdate()
         {
+            transform.Translate(Vector3.forward * Speed * Time.fixedDeltaTime);
             if (IsReached())
             {
                 EndMove();
+                transform.position = _target - transform.forward;   // Correct the final position
                 enabled = false;
             }
         }
 
+        private void AddListener()
+        {
+            if (Dispatcher != null)
+                Dispatcher.AddListener<CollideEvent>(OnCollide);
+        }
+
+        private void RemoveListener()
+        {
+            if (Dispatcher != null)
+                Dispatcher.RemoveListener<CollideEvent>(OnCollide);
+        }
+
+        private void OnCollide(CollideEvent e)
+        {
+            EndMove();
+            //var ray = new Ray(transform.position, Vector3.up);
+            Debug.DrawRay(transform.position, Vector3.up * 5, Color.white, 3);
+            enabled = false;
+        }
+
         private void EndMove()
         {
-            if (_animator)
-            {
-                _animator.SetBool("Moving", false);
-                _animator.SetBool("Running", false);
-                _rigid.velocity = Vector3.zero;
-                OnEnd.Invoke();
-            }
+            OnEnd.Invoke();
         }
     }
 }

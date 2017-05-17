@@ -10,7 +10,5 @@ public class Stander : MovementBehaviour
         var animator = GetComponent<Animator>();
         animator.SetBool("Moving", false);
         animator.SetBool("Running", false);
-        var rigi = GetComponent<Rigidbody>();
-        rigi.velocity = Vector3.zero;
     }
 }
