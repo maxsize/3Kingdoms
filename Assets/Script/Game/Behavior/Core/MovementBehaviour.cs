@@ -2,18 +2,21 @@
 using System.Collections;
 using UnityEngine.Events;
 using System;
+using Adic;
+using Game.Behavior.Movement;
+using Game.Event;
+using ThreeK.Game.Helper;
 
 namespace ThreeK.Game.Behavior.Core
 {
-    [RequireComponent(typeof(Rigidbody))]
+    [InjectFromContainer(BindingHelper.Identifiers.PlayerContainer)]
     public class MovementBehaviour : MonoBehaviour
     {
+        [Inject] public EventDispatcher Dispatcher;
         public UnityEvent OnEnd = new UnityEvent();
 
-        protected virtual void Start()
-        {
-        }
-
+        private bool _injected;
+        
         public virtual void SetTarget(object target)
         {
             SetTarget(target, 0);
@@ -21,11 +24,18 @@ namespace ThreeK.Game.Behavior.Core
 
         public virtual void SetTarget(object target, float latency)
         {
+            if (!_injected)
+            {
+                this.Inject();
+                _injected = true;
+            }
+            
             if (target is Quaternion) SetTarget((Quaternion)target, latency);
             if (target is Vector3) SetTarget((Vector3)target, latency);
             if (target is Transform) SetTarget((Transform)target, latency);
             if (target == null) SetTarget();
             enabled = true;
+            Dispatcher.DispatchWith<TargetChangeEvent>(GetType().Name);
         }
 
         protected virtual void SetTarget()
@@ -45,6 +55,13 @@ namespace ThreeK.Game.Behavior.Core
         protected virtual void SetTarget(Transform target, float latency)
         {
             throw new NotImplementedException();
+        }
+    }
+
+    public class TargetChangeEvent : FEvent
+    {
+        public TargetChangeEvent(object data) : base(data)
+        {
         }
     }
 }

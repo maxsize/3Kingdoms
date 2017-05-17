@@ -7,7 +7,8 @@ namespace ThreeK.Game.Helper
     {
         public enum Identifiers
         {
-            MainContainer
+            MainContainer,
+            PlayerContainer
         }
     }
 

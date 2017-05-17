@@ -52,9 +52,6 @@
     <Reference Include="UnityEngine">
       <HintPath>Library\UnityAssemblies\UnityEngine.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.Advertisements">
-      <HintPath>Library\UnityAssemblies\UnityEngine.Advertisements.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEngine.UI">
       <HintPath>Library\UnityAssemblies\UnityEngine.UI.dll</HintPath>
     </Reference>
@@ -69,9 +66,6 @@
     </Reference>
     <Reference Include="UnityEngine.HoloLens">
       <HintPath>Library\UnityAssemblies\UnityEngine.HoloLens.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.Purchasing">
-      <HintPath>Library\UnityAssemblies\UnityEngine.Purchasing.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.VR">
       <HintPath>Library\UnityAssemblies\UnityEngine.VR.dll</HintPath>
@@ -157,16 +151,19 @@
     <Compile Include="Assets\Script\Adic\Framework\Util\CallDelegates.cs" />
     <Compile Include="Assets\Script\Adic\Framework\Util\MethodUtils.cs" />
     <Compile Include="Assets\Script\Adic\Framework\Util\TypeUtils.cs" />
+    <Compile Include="Assets\Script\Game\Behavior\Anim\AnimationAdaptor.cs" />
     <Compile Include="Assets\Script\Game\Behavior\Core\InjectableBehaviour.cs" />
     <Compile Include="Assets\Script\Game\Behavior\Core\MovementBehaviour.cs" />
     <Compile Include="Assets\Script\Game\Behavior\GameController.cs" />
     <Compile Include="Assets\Script\Game\Behavior\Movement\Attacker.cs" />
+    <Compile Include="Assets\Script\Game\Behavior\Movement\CollisionDetector.cs" />
     <Compile Include="Assets\Script\Game\Behavior\Movement\Follower.cs" />
     <Compile Include="Assets\Script\Game\Behavior\Movement\Mover.cs" />
     <Compile Include="Assets\Script\Game\Behavior\Movement\Mover2.cs" />
     <Compile Include="Assets\Script\Game\Behavior\Movement\Spinner.cs" />
     <Compile Include="Assets\Script\Game\Behavior\Movement\Stander.cs" />
     <Compile Include="Assets\Script\Game\Behavior\Player.cs" />
+    <Compile Include="Assets\Script\Game\Event\EventDispatcher.cs" />
     <Compile Include="Assets\Script\Game\Helper\BindingHelper.cs" />
     <Compile Include="Assets\Script\Game\Helper\InputHelper.cs" />
     <Compile Include="Assets\Script\Game\Networking\LocalPlayer.cs" />

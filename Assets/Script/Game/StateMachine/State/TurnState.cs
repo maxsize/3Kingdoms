@@ -20,8 +20,8 @@ namespace ThreeK.Game.StateMachine.State
         public TurnState(IStateMachine stateMachine)
         {
             _target = GetTarget(InputHelper.CurrentInput);
-            var rigi = (stateMachine as MonoBehaviour).GetComponent<Rigidbody>();
-            _data = Quaternion.LookRotation(_target - rigi.position);
+            var trans = (stateMachine as MonoBehaviour).transform;
+            _data = Quaternion.LookRotation(_target - trans.position);
         }
 
         public override object Data
