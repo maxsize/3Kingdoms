@@ -43,7 +43,7 @@ namespace ThreeK.Game.Networking
             {
                 _client = new NetworkClient();
                 _client.RegisterHandler(MsgType.Connect, OnConnect);
-                _client.RegisterHandler(NetworkUnitMessage.MessageType, OnAnim);
+                _client.RegisterHandler(NetworkUnitMessage.MessageType, OnMessageReceive);
                 _client.Connect("localhost", 7777);
             }
         }
@@ -134,16 +134,10 @@ namespace ThreeK.Game.Networking
             // Sender on server side will receive this message
             // When server receives messages, sync movement and send to all the clients
             var msg = netMsg.ReadMessage<NetworkUnitMessage>();
-            var latency = GetLatency(netMsg.conn, msg.Timestamp);
+            var latency = GetLatency(netMsg.conn, msg.Timestamp, "Client to Server");
             SyncClientObject(msg, latency);
             msg.Timestamp -= latency;   // Add current message delay and send to everyone
             SendMessage(msg);
-            //var keys = NetworkServer.objects;
-            //foreach (KeyValuePair<NetworkInstanceId, NetworkIdentity> pair in keys)
-            //{
-            //    if (msg.NetId == pair.Key) continue;
-            //    NetworkServer.SendToClient(pair.Value.connectionToClient.connectionId, NetworkUnitMessage.MessageType, msg);
-            //}
         }
 
         private void SyncClientObject(NetworkUnitMessage msg, float latency)
@@ -156,6 +150,7 @@ namespace ThreeK.Game.Networking
                 Debug.LogError(string.Format("Client {0} not found!", msg.NetId));
                 return;
             }
+            clientObj.transform.position = msg.Position;
             var unit = clientObj.GetComponent<NetworkUnit>();
             if (unit.isLocalPlayer) return;     // This is the sender it self
             unit.StartMovement(msg.GetData(), latency);
@@ -165,21 +160,21 @@ namespace ThreeK.Game.Networking
         {
         }
 
-        private void OnAnim(NetworkMessage netMsg)
+        private void OnMessageReceive(NetworkMessage netMsg)
         {
             // When client receives messages, just sync movement and no further message will be sent
             var msg = netMsg.ReadMessage<NetworkUnitMessage>();
-            var latency = GetLatency(netMsg.conn, msg.Timestamp);
+            var latency = GetLatency(netMsg.conn, msg.Timestamp, "Server to Client");
             //if (isServer) return;
             if (msg.NetId == netId) return;     // Don't sync the sender it self
             SyncClientObject(msg, latency);
         }
 
-        private int GetLatency(NetworkConnection conn, int remoteTimestamp)
+        private int GetLatency(NetworkConnection conn, int remoteTimestamp, string debugMsg)
         {
             byte error;
             var delay = NetworkTransport.GetRemoteDelayTimeMS(conn.hostId, conn.connectionId, remoteTimestamp, out error);
-            Debug.Log("Latency: " + delay);
+            Debug.Log(debugMsg + " Latency: " + delay);
             return delay / 1000;
         }
     }
