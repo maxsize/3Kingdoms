@@ -64,9 +64,9 @@ namespace ThreeK.Game.Behavior.Movement
             transform.Translate(Vector3.forward * Speed * Time.fixedDeltaTime);
             if (IsReached())
             {
-                EndMove();
                 Debug.Log(transform.position + " - " + _target + " - " + Vector3.Distance(transform.position, _target));
                 transform.position = _target;   // Correct the final position
+                EndMove();
                 enabled = false;
             }
         }
