@@ -31,7 +31,18 @@ namespace ThreeK.Game.Networking
 
         private bool CreateAndHandleInput(Type inputType)
         {
-            var input = MainContainer.Resolve<IInput>(inputType);
+            IInput input = null;
+            if (inputType.Equals(typeof(AttackInput)))
+            {
+                AttackInput attackInput = MainContainer.Resolve<AttackInput>();
+                input = attackInput;
+            }
+            else if (inputType.Equals(typeof(MoveInput)))
+            {
+                MoveInput moveInput = MainContainer.Resolve<MoveInput>();
+                input = moveInput;
+            }
+            
             if (input != null)
                 Machine.HandleInput(input);
             return input != null;

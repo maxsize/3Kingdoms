@@ -15,9 +15,9 @@ namespace ThreeK.Game.StateMachine.Input
         public object Create(InjectionContext context)
         {
             IInput input = null;
-            if (context.identifier.Equals(typeof(MoveInput)))
+            if (context.memberType.Equals(typeof(MoveInput)))
                 input = CreateMoveInput(context);
-            if (context.identifier.Equals(typeof(AttackInput)))
+            if (context.memberType.Equals(typeof(AttackInput)))
                 input = CreateAttackInput(context);
 
             if (input != null)

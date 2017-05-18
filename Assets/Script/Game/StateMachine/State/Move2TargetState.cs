@@ -1,4 +1,5 @@
 ﻿using ThreeK.Game.Helper;
+using ThreeK.Game.StateMachine.Input;
 using UnityEngine;
 
 namespace ThreeK.Game.StateMachine.State
@@ -15,6 +16,11 @@ namespace ThreeK.Game.StateMachine.State
         public override object Data
         {
             get { return _target.position; }
+        }
+
+        protected override Vector3 GetDestination(IInput input)
+        {
+            return ((Transform)input.Data).position;
         }
     }
 }

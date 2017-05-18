@@ -37,6 +37,10 @@ namespace ThreeK.Game.Networking
                 //GetComponent<Rigidbody>().mass = float.MaxValue;
                 GetComponent<CollisionDetector>().enabled = true;
             }
+            else
+            {
+                gameObject.layer = LayerMask.NameToLayer("Enemy");
+            }
             if (IsHost)
                 NetworkServer.RegisterHandler(NetworkUnitMessage.MessageType, OnClientToServer);
             else if (isClient)
@@ -51,7 +55,19 @@ namespace ThreeK.Game.Networking
         private void OnStateChange(IState newState)
         {
             var data = newState.Data;
-            StartMovement(data);
+            StartMovement(newState);
+        }
+
+        private void StartMovement(IState state)
+        {
+            if (state is AttackState)
+            {
+                var t = state.Data as Transform;
+                var comp = t.GetComponent<Attackable>();
+                StartMovement(comp);
+                return;
+            }
+            StartMovement(state.Data);
         }
 
         private void StartMovement(object data, float latency = 0.0f)
@@ -64,25 +80,33 @@ namespace ThreeK.Game.Networking
             }
 
             MovementBehaviour m = null;
+            var usingData = data;
             if (data is Quaternion)
                 m = GetMovement(typeof(Spinner));
             else if (data is Vector3)
                 m = GetMovement(typeof(Mover));
             else if (data is Transform)
+                m = GetMovement(typeof(Mover2));
+            else if (data is Attackable)
             {
-                var t = data as Transform;
-                if (Vector3.Distance(t.position, transform.position) <= 2)
-                    m = GetMovement(typeof(Attacker));
-                else
-                    m = GetMovement(typeof(Mover2));
+                var t = ((Attackable)data).transform;
+                usingData = t;
+                m = GetMovement(typeof(Attacker));
             }
             else if (data == null)
                 m = GetMovement(typeof(Stander));
+            else if (data is NetworkInstanceId)
+            {
+                // Sync from server to client
+                var go = ClientScene.FindLocalObject((NetworkInstanceId)data);
+                usingData = go.transform;
+                m = GetMovement(typeof(Attacker));
+            }
 
             if (m != null)
             {
                 m.OnEnd.AddListener(OnStateEnd);
-                m.SetTarget(data, latency);
+                m.SetTarget(usingData, latency);
                 _currentMovement = m;
                 Sync(data);
             }
@@ -212,10 +236,15 @@ namespace ThreeK.Game.Networking
                 Rotation = (Quaternion)data;
                 Type = SyncType.Rotate;
             }
-            else if (data is NetworkInstanceId)
+            else if (data is Transform)
             {
-                Target = (NetworkInstanceId)data;
+                Target = ((Transform)data).GetComponent<NetworkIdentity>().netId;
                 Type = SyncType.Follow;
+            }
+            else if (data is Attackable)
+            {
+                Target = ((Attackable)data).GetComponent<NetworkIdentity>().netId;
+                Type = SyncType.Attack;
             }
             else if (data == null)
             {

@@ -52,9 +52,6 @@
     <Reference Include="UnityEngine">
       <HintPath>Library\UnityAssemblies\UnityEngine.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.Advertisements">
-      <HintPath>Library\UnityAssemblies\UnityEngine.Advertisements.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEngine.UI">
       <HintPath>Library\UnityAssemblies\UnityEngine.UI.dll</HintPath>
     </Reference>
@@ -69,9 +66,6 @@
     </Reference>
     <Reference Include="UnityEngine.HoloLens">
       <HintPath>Library\UnityAssemblies\UnityEngine.HoloLens.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.Purchasing">
-      <HintPath>Library\UnityAssemblies\UnityEngine.Purchasing.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.VR">
       <HintPath>Library\UnityAssemblies\UnityEngine.VR.dll</HintPath>
@@ -158,6 +152,7 @@
     <Compile Include="Assets\Script\Adic\Framework\Util\MethodUtils.cs" />
     <Compile Include="Assets\Script\Adic\Framework\Util\TypeUtils.cs" />
     <Compile Include="Assets\Script\Game\Behavior\Anim\AnimationAdaptor.cs" />
+    <Compile Include="Assets\Script\Game\Behavior\Core\Attackable.cs" />
     <Compile Include="Assets\Script\Game\Behavior\Core\InjectableBehaviour.cs" />
     <Compile Include="Assets\Script\Game\Behavior\Core\MovementBehaviour.cs" />
     <Compile Include="Assets\Script\Game\Behavior\GameController.cs" />
