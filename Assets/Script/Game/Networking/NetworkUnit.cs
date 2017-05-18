@@ -45,10 +45,11 @@ namespace ThreeK.Game.Networking
                 NetworkServer.RegisterHandler(NetworkUnitMessage.MessageType, OnClientToServer);
             else if (isClient)
             {
+                NetworkManager manager = FindObjectOfType<NetworkManager>();
                 _client = new NetworkClient();
                 _client.RegisterHandler(MsgType.Connect, OnConnect);
                 _client.RegisterHandler(NetworkUnitMessage.MessageType, OnMessageReceive);
-                _client.Connect("localhost", 7777);
+                _client.Connect(manager.networkAddress, manager.networkPort);
             }
         }
 
