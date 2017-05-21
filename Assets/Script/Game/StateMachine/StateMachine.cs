@@ -8,7 +8,7 @@ using UnityEngine.Events;
 
 namespace ThreeK.Game.StateMachine
 {
-    public class StateMachine : MonoBehaviour, IStateMachine
+    public class MonoStateMachine : MonoBehaviour, IStateMachine
     {
         public IState CurrentState { get; protected set; }
 
@@ -17,17 +17,10 @@ namespace ThreeK.Game.StateMachine
         }
 
         private readonly StateChangeEvent _onStateChange = new StateChangeEvent();
-        private List<IState> _states = new List<IState>();
 
-        public virtual void AddStates(IState[] states, IState defaultState)
+        public virtual void AddState(IState defaultState)
         {
-            _states.AddRange(states);
             ChangeState(defaultState);
-        }
-
-        public IEnumerable<IState> GetStates()
-        {
-            return _states.ToArray();
         }
 
         public virtual IState HandleInput(IInput input)

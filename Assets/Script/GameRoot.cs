@@ -9,6 +9,7 @@ using ThreeK.Game.Behavior;
 using Adic.Container;
 using UnityEngine.Networking;
 using ThreeK.Game.Helper;
+using ThreeK.Game.Data;
 
 public class GameRoot : ContextRoot
 {
@@ -21,6 +22,7 @@ public class GameRoot : ContextRoot
             .RegisterExtension<EventCallerContainerExtension>()
             .Bind<NetworkManager>().ToGameObject("NetworkManager")
             .Bind<InputFactory>().ToSingleton()
+            .Bind<PlayerVO>().ToSingleton()
             .Bind<AttackInput>().ToFactory<InputFactory>()
             .Bind<MoveInput>().ToFactory<InputFactory>()
             //.Bind<IStateMachine>().ToPrefab<Player>("Warrior3/Hammer/Prefabs/Hammer").As("Hammer")

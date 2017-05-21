@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using ThreeK.Game.StateMachine.State;
 using ThreeK.Game.StateMachine.Input;
 using UnityEngine.Events;
+using System;
 
 namespace ThreeK.Game.StateMachine
 {
     public interface IStateMachine
     {
         StateChangeEvent OnStateChange { get; }
-        IEnumerable<IState> GetStates();
         IState CurrentState { get; }
-        void AddStates(IState[] states, IState defaultState);
+        void AddState(IState defaultState);
         /// <summary>
         /// Handle input, generate and return next state
         /// </summary>
@@ -21,5 +21,15 @@ namespace ThreeK.Game.StateMachine
     }
 
     public class StateChangeEvent : UnityEvent<IState>
-    { }
+    {
+        internal void AddListener()
+        {
+            throw new NotImplementedException();
+        }
+
+        internal void AddListener(StateChangeEvent onStateChange)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

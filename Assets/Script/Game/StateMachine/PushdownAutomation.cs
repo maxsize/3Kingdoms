@@ -7,7 +7,7 @@ using ThreeK.Game.Helper;
 namespace ThreeK.Game.StateMachine
 {
     [InjectFromContainer(BindingHelper.Identifiers.MainContainer)]
-    public class PushdownAutomation : StateMachine
+    public class PushdownAutomation : MonoStateMachine
     {
         protected List<IState> Stack;
 

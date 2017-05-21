@@ -44,7 +44,6 @@ public class Player : PushdownAutomation
             .Bind<IState>().To<AttackState>().As(typeof(AttackState));
 
 
-        List<IState> states = new List<IState> { };
-        AddStates(states.ToArray(), _subContainer.Resolve<IState>(typeof(IdleState)));
+        AddState(_subContainer.Resolve<IState>(typeof(IdleState)));
     }
 }
