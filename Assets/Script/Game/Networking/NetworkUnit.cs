@@ -36,6 +36,7 @@ namespace ThreeK.Game.Networking
                 //GetComponent<Rigidbody>().isKinematic = false;
                 //GetComponent<Rigidbody>().mass = float.MaxValue;
                 GetComponent<CollisionDetector>().enabled = true;
+                Camera.main.GetComponent<SmoothFollow>().target = transform;
             }
             else
             {
