@@ -112,6 +112,9 @@
     <Reference Include="SyntaxTree.VisualStudio.Unity.Bridge">
       <HintPath>Library\UnityAssemblies\SyntaxTree.VisualStudio.Unity.Bridge.dll</HintPath>
     </Reference>
+    <Reference Include="Adic">
+      <HintPath>Assets\Plugins\Adic.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="3Kingdoms.csproj">
@@ -122,14 +125,6 @@
   <ItemGroup>
     <Compile Include="Assets\Resources\Warrior3\Elements\Editor\ReviewConfig.cs" />
     <Compile Include="Assets\Resources\Warrior3\Elements\Editor\ReviewWindowEditor.cs" />
-    <Compile Include="Assets\Script\Adic\Extensions\BindingsPrinter\Editor\BindingsPrinterWindow.cs" />
-    <Compile Include="Assets\Script\Adic\Extensions\BindingsPrinter\Editor\EditorStyles.cs" />
-    <Compile Include="Assets\Script\Adic\Extensions\Commander\Behaviours\Editor\CommandDispatchEditor.cs" />
-    <Compile Include="Assets\Script\Adic\Extensions\Commander\Behaviours\Editor\NamespaceCommandEditor.cs" />
-    <Compile Include="Assets\Script\Adic\Extensions\Commander\Behaviours\Editor\TimedCommandDispatchEditor.cs" />
-    <Compile Include="Assets\Script\Adic\Extensions\Commander\Types\Editor\CommandReferenceDrawer.cs" />
-    <Compile Include="Assets\Script\Adic\Extensions\ContextRoot\Editor\ContextRootEditor.cs" />
-    <Compile Include="Assets\Script\Adic\Extensions\ContextRoot\Editor\Util\ExecutionOrderUtils.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />
