@@ -1,10 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using Adic;
-using Game.Behavior.Movement;
-using Game.Event;
+﻿using Game.Behavior.Movement;
 using ThreeK.Game.Behavior.Core;
-using ThreeK.Game.Networking;
 using UnityEngine;
 
 namespace ThreeK.Game.Behavior.Movement
@@ -59,12 +54,12 @@ namespace ThreeK.Game.Behavior.Movement
             RemoveListener();
         }
 
-        private void FixedUpdate()
+        protected virtual void FixedUpdate()
         {
             transform.Translate(Vector3.forward * Speed * Time.fixedDeltaTime);
             if (IsReached())
             {
-                Debug.Log(transform.position + " - " + _target + " - " + Vector3.Distance(transform.position, _target));
+                //Debug.Log(transform.position + " - " + _target + " - " + Vector3.Distance(transform.position, _target));
                 transform.position = _target;   // Correct the final position
                 EndMove();
                 enabled = false;

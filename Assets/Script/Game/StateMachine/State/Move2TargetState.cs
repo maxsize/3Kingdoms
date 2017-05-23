@@ -15,7 +15,7 @@ namespace ThreeK.Game.StateMachine.State
 
         public override object Data
         {
-            get { return _target.position; }
+            get { return _target; }
         }
 
         protected override Vector3 GetDestination(IInput input)

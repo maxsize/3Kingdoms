@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Game.Event
+namespace ThreeK.Game.Event
 {
 
     public class FEvent
@@ -36,6 +36,17 @@ namespace Game.Event
 
         private readonly Dictionary<Type, EventDelegate> _delegates = new Dictionary<Type, EventDelegate>();
         private readonly Dictionary<Delegate, EventDelegate> _delegateLookup = new Dictionary<Delegate, EventDelegate>();
+
+        private string _uid;
+        public string UID
+        {
+            get { return _uid; }
+        }
+
+        public EventDispatcher()
+        {
+            _uid = new Random().Next().ToString();
+        }
 
         public void AddListener<T>(EventDelegate<T> del) where T : FEvent
         {

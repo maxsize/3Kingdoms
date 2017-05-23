@@ -12,9 +12,6 @@ namespace ThreeK.Game.Behavior
 
         public GameController(NetworkManager networkManager)
         {
-            var crossbow = Resources.Load("Warrior3/Crossbow/Prefabs/Crossbow") as GameObject;
-            //crossbow.AddComponent<LocalPlayer>();
-            networkManager.playerPrefab = crossbow;
         }
     }
 }

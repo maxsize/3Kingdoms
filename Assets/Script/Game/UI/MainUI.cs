@@ -27,7 +27,8 @@ namespace ThreeK.Game.UI
         {
             DisableAll();
             var child = transform.Find(state.Data.ToString());
-            child.gameObject.SetActive(true);
+            if (child != null)
+                child.gameObject.SetActive(true);
         }
 
         private void DisableAll()

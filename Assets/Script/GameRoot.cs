@@ -10,6 +10,7 @@ using Adic.Container;
 using UnityEngine.Networking;
 using ThreeK.Game.Helper;
 using ThreeK.Game.Data;
+using ThreeK.Game.Event;
 
 public class GameRoot : ContextRoot
 {
@@ -20,7 +21,8 @@ public class GameRoot : ContextRoot
         _container.RegisterExtension<UnityBindingContainerExtension>()
             .RegisterExtension<CommanderContainerExtension>()
             .RegisterExtension<EventCallerContainerExtension>()
-            .Bind<NetworkManager>().ToGameObject("NetworkManager")
+            .Bind<ContextRoot>().To(this)
+            .Bind<EventDispatcher>().ToSingleton()
             .Bind<InputFactory>().ToSingleton()
             .Bind<PlayerVO>().ToSingleton()
             .Bind<AttackInput>().ToFactory<InputFactory>()
@@ -28,7 +30,7 @@ public class GameRoot : ContextRoot
             //.Bind<IStateMachine>().ToPrefab<Player>("Warrior3/Hammer/Prefabs/Hammer").As("Hammer")
             //.Bind<IStateMachine>().ToPrefab<Player>("Warrior3/Crossbow/Prefabs/Crossbow").As("Crossbow")
             //.Bind<IStateMachine>().ToPrefab<Player>("Warrior3/Swordsman/Prefabs/Swordsman").As("Swordsman")
-            .Bind<ContextRoot>().To(this)
+            .Bind<NetworkManager>().ToGameObject("NetworkManager")
             .Bind<GameController>().ToSingleton();
     }
 

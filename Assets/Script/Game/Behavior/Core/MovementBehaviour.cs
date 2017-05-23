@@ -1,11 +1,9 @@
 ﻿using UnityEngine;
-using System.Collections;
 using UnityEngine.Events;
 using System;
 using Adic;
-using Game.Behavior.Movement;
-using Game.Event;
 using ThreeK.Game.Helper;
+using ThreeK.Game.Event;
 
 namespace ThreeK.Game.Behavior.Core
 {

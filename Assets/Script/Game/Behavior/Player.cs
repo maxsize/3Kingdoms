@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using Adic;
+﻿using Adic;
 using Adic.Container;
-using Game.Event;
 using ThreeK.Game.StateMachine;
-using ThreeK.Game.StateMachine.Input;
 using ThreeK.Game.StateMachine.State;
-using UnityEngine;
 using ThreeK.Game.Helper;
 using UnityEngine.Networking;
+using ThreeK.Game.Event;
 
 [InjectFromContainer(BindingHelper.Identifiers.MainContainer)]
 public class Player : PushdownAutomation
@@ -45,5 +41,20 @@ public class Player : PushdownAutomation
 
 
         AddState(_subContainer.Resolve<IState>(typeof(IdleState)));
+    }
+
+    protected override IState PreStateChange(IState state)
+    {
+        if (state is IStateStack)
+        {
+            var idle = Stack[0];
+            Stack.Clear();
+            Stack.Add(idle);    // Only keep idle state
+            Stack.AddRange((state as IStateStack).GetStack());
+            var next = Stack[Stack.Count - 1];
+            Stack.Remove(next);
+            return next;
+        }
+        return state;
     }
 }

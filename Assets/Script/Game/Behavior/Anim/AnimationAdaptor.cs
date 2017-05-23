@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Adic;
-using Game.Event;
+﻿using Adic;
 using ThreeK.Game.Behavior.Core;
-using ThreeK.Game.Behavior.Movement;
+using ThreeK.Game.Event;
 using ThreeK.Game.Helper;
 using UnityEngine;
 

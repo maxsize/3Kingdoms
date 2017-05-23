@@ -18,4 +18,11 @@ namespace ThreeK.Game.UI
         {
         }
     }
+
+    public class GameSceneInput : GameInput
+    {
+        public GameSceneInput(object data = null) : base(data)
+        {
+        }
+    }
 }

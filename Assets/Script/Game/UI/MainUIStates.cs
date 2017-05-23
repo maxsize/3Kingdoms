@@ -31,6 +31,8 @@ namespace ThreeK.Game.UI
         {
             if (input is HeroSelectionInput)
                 return new HeroSelectionState();
+            else if (input is GameSceneInput)
+                return new MainGameState();
             return this;
         }
 
@@ -39,6 +41,24 @@ namespace ThreeK.Game.UI
             get
             {
                 return "Lobby";
+            }
+        }
+    }
+
+    public class MainGameState : BaseUIState
+    {
+        public override IState HandleInput(IInput input)
+        {
+            if (input is HeroSelectionInput)
+                return new HeroSelectionState();
+            return this;
+        }
+
+        public override object Data
+        {
+            get
+            {
+                return "MainGame";
             }
         }
     }

@@ -9,8 +9,9 @@ namespace ThreeK.Game.Behavior.Movement
 
         protected override void SetTarget(Transform target, float latency)
         {
+            SetTarget(target.position, latency);
             _targetTrans = target;
-            transform.Translate(Vector3.forward * latency);
+            //transform.Translate(Vector3.forward * latency);
             StartMovement();
         }
 
@@ -26,6 +27,12 @@ namespace ThreeK.Game.Behavior.Movement
                 animator.SetBool("Running", false);
             }
             return dist < Threashold;
+        }
+
+        protected override void FixedUpdate()
+        {
+            transform.rotation = Quaternion.LookRotation(_targetTrans.position - transform.position);
+            base.FixedUpdate();
         }
     }
 }

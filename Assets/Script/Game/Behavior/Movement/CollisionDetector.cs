@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using Adic;
-using Game.Event;
 using ThreeK.Game.Helper;
-using ThreeK.Game.Networking;
 using UnityEngine;
-using UnityEngine.Events;
+using ThreeK.Game.Event;
 
 namespace Game.Behavior.Movement
 {

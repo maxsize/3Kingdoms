@@ -24,12 +24,7 @@ namespace ThreeK.Game.StateMachine
                 Stack.Add(oldState);    // Only keep the last state (idle state)
 
             var next = CurrentState.HandleInput(input);
-            if (next is IStateStack)
-            {
-                Stack.AddRange((next as IStateStack).GetStack());
-                next = Stack[Stack.Count - 1];
-                Stack.Remove(next);
-            }
+            next = PreStateChange(next);
 
             ChangeState(next);
             return next;
@@ -43,6 +38,11 @@ namespace ThreeK.Game.StateMachine
             Stack.Remove(next);         // Pop last state (current state)
             ChangeState(next);    // Update current state
             return true;
+        }
+
+        protected virtual IState PreStateChange(IState state)
+        {
+            return state;
         }
     }
 }

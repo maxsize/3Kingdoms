@@ -25,6 +25,7 @@ bld/
 Temp/
 Resources/
 Build/
+Assets/Script/Adic
 
 # Visual Studio 2015 cache/options directory
 .vs/
