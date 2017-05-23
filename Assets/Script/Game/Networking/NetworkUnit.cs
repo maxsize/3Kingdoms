@@ -10,6 +10,7 @@ using System.Linq;
 using Game.Behavior.Anim;
 using Game.Behavior.Movement;
 using ThreeK.Game.Behavior.Movement;
+using ThreeK.Game.Helper;
 
 namespace ThreeK.Game.Networking
 {
@@ -62,17 +63,11 @@ namespace ThreeK.Game.Networking
 
         private void StartMovement(IState state)
         {
-            if (state is AttackState)
-            {
-                var t = state.Data as Transform;
-                var comp = t.GetComponent<Attackable>();
-                StartMovement(comp);
-                return;
-            }
-            StartMovement(state.Data);
+            var data = MovementHelper.GetMovementData(state);
+            StartMovement(data);
         }
 
-        private void StartMovement(object data, float latency = 0.0f)
+        private void StartMovement(MovementData data, float latency = 0.0f)
         {
             if (_currentMovement != null)
             {
@@ -81,36 +76,13 @@ namespace ThreeK.Game.Networking
                 _currentMovement.enabled = false;
             }
 
-            MovementBehaviour m = null;
-            var usingData = data;
-            if (data is Quaternion)
-                m = GetMovement(typeof(Spinner));
-            else if (data is Vector3)
-                m = GetMovement(typeof(Mover));
-            else if (data is Transform)
-                m = GetMovement(typeof(Mover2));
-            else if (data is Attackable)
-            {
-                var t = ((Attackable)data).transform;
-                usingData = t;
-                m = GetMovement(typeof(Attacker));
-            }
-            else if (data == null)
-                m = GetMovement(typeof(Stander));
-            else if (data is NetworkInstanceId)
-            {
-                // Sync from server to client
-                var go = ClientScene.FindLocalObject((NetworkInstanceId)data);
-                usingData = go.transform;
-                m = GetMovement(typeof(Attacker));
-            }
-
+            var m = GetMovement(data.MovementType);
             if (m != null)
             {
                 m.OnEnd.AddListener(OnStateEnd);
-                m.SetTarget(usingData, latency);
+                m.SetTarget(data.Data, latency);
                 _currentMovement = m;
-                Sync(data);
+                Sync(data.Data);
             }
         }
 
@@ -125,16 +97,19 @@ namespace ThreeK.Game.Networking
                 NetId = netId
             };
             msg.SetData(data);
-            SendMessage(msg);
+            SendMessage(msg, NetworkTransport.GetNetworkTimestamp());
         }
 
-        void SendMessage(NetworkUnitMessage msg)
+        void SendMessage(NetworkUnitMessage msg, int timestamp)
         {
-            msg.Timestamp = NetworkTransport.GetNetworkTimestamp();     // Add timestamp
+            msg.Timestamp = timestamp;     // Add timestamp
             if (IsHost)
                 NetworkServer.SendToAll(NetworkUnitMessage.MessageType, msg);
             else
-                _client.Send(NetworkUnitMessage.MessageType, msg);
+            {
+                if (_client.connection != null)
+                    _client.Send(NetworkUnitMessage.MessageType, msg);
+            }
         }
 
         private void OnStateEnd()
@@ -162,8 +137,8 @@ namespace ThreeK.Game.Networking
             var msg = netMsg.ReadMessage<NetworkUnitMessage>();
             var latency = GetLatency(netMsg.conn, msg.Timestamp, "Client to Server");
             SyncClientObject(msg, latency);
-            msg.Timestamp -= latency;   // Add current message delay and send to everyone
-            SendMessage(msg);
+            var timestamp = NetworkTransport.GetNetworkTimestamp() - latency;   // Add current message delay and send to everyone
+            SendMessage(msg, timestamp);
         }
 
         private void SyncClientObject(NetworkUnitMessage msg, float latency)
@@ -179,7 +154,19 @@ namespace ThreeK.Game.Networking
             clientObj.transform.position = msg.Position;
             var unit = clientObj.GetComponent<NetworkUnit>();
             if (unit.isLocalPlayer) return;     // This is the sender it self
-            unit.StartMovement(msg.GetData(), latency);
+
+            var data = msg.GetData();
+            if (data.Data is NetworkInstanceId)
+            {
+                // In this case, will need to get client transform
+                var go = ClientScene.FindLocalObject((NetworkInstanceId)data.Data);
+                if (go == null)
+                {
+                    throw new Exception(string.Format("network instance {0} not found.", data));
+                }
+                data.Data = go.transform;   // Override instanceId as client transform
+            }
+            unit.StartMovement(data, latency);
         }
 
         private void OnConnect(NetworkMessage netMsg)
@@ -209,16 +196,7 @@ namespace ThreeK.Game.Networking
     {
         public static short MessageType = MsgType.Highest + 1;
 
-        public enum SyncType
-        {
-            Rotate,
-            Move,
-            Follow,
-            Attack,
-            Idle
-        }
-
-        public SyncType Type;
+        public string MovementType;
         public NetworkInstanceId NetId;
         public Vector3 Position;
         public Quaternion Rotation;
@@ -231,46 +209,51 @@ namespace ThreeK.Game.Networking
             if (data is Vector3)
             {
                 Velocity = (Vector3)data;
-                Type = SyncType.Move;
+                MovementType = typeof(Mover).Name;
             }
             else if (data is Quaternion)
             {
                 Rotation = (Quaternion)data;
-                Type = SyncType.Rotate;
+                MovementType = typeof(Spinner).Name;
             }
             else if (data is Transform)
             {
                 Target = ((Transform)data).GetComponent<NetworkIdentity>().netId;
-                Type = SyncType.Follow;
+                MovementType = typeof(Mover2).Name;
             }
             else if (data is Attackable)
             {
                 Target = ((Attackable)data).GetComponent<NetworkIdentity>().netId;
-                Type = SyncType.Attack;
+                MovementType = typeof(Attacker).Name;
             }
             else if (data == null)
             {
-                Type = SyncType.Idle;
+                MovementType = typeof(Stander).Name;
             }
         }
 
-        public object GetData()
+        public MovementData GetData()
         {
             object value = null;
-            switch (Type)
+            switch (MovementType)
             {
-                case SyncType.Attack:
-                case SyncType.Follow:
+                case "Attacker":
+                case "Mover2":
                     value = Target;
                     break;
-                case SyncType.Move:
+                case "Mover":
                     value = Velocity;
                     break;
-                case SyncType.Rotate:
+                case "Spinner":
                     value = Rotation;
                     break;
             }
-            return value;
+            var data = new MovementData()
+            {
+                MovementType = Type.GetType(MovementType),
+                Data = value
+            };
+            return data;
         }
     }
 }
