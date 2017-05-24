@@ -2,31 +2,34 @@
 using System.Collections;
 using ThreeK.Game.Behavior.Core;
 
-public class Stander : MovementBehaviour
+namespace ThreeK.Game.Behavior.Movement
 {
-    protected Vector3 Position = Vector3.zero;
-
-    private void FixedUpdate()
+    public class Stander : MovementBehaviour
     {
-        if (Position != Vector3.zero)
-            transform.position = Position;
-    }
+        protected Vector3 Position = Vector3.zero;
 
-    private void OnDisable()
-    {
-        Position = Vector3.zero;
-    }
+        private void FixedUpdate()
+        {
+            if (Position != Vector3.zero)
+                transform.position = Position;
+        }
 
-    public override void End()
-    {
-        enabled = false;
-    }
+        private void OnDisable()
+        {
+            Position = Vector3.zero;
+        }
 
-    protected override void SetTarget()
-    {
-        var animator = GetComponent<Animator>();
-        animator.SetBool("Moving", false);
-        animator.SetBool("Running", false);
-        Position = transform.position;
+        public override void End()
+        {
+            enabled = false;
+        }
+
+        protected override void SetTarget()
+        {
+            var animator = GetComponent<Animator>();
+            animator.SetBool("Moving", false);
+            animator.SetBool("Running", false);
+            Position = transform.position;
+        }
     }
 }
