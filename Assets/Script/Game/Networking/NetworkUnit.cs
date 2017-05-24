@@ -37,7 +37,7 @@ namespace ThreeK.Game.Networking
                 //GetComponent<Rigidbody>().isKinematic = false;
                 //GetComponent<Rigidbody>().mass = float.MaxValue;
                 GetComponent<CollisionDetector>().enabled = true;
-                Camera.main.GetComponent<SmoothFollow>().target = transform;
+                //Camera.main.GetComponent<SmoothFollow>().target = transform;
             }
             else
             {
@@ -57,7 +57,6 @@ namespace ThreeK.Game.Networking
 
         private void OnStateChange(IState newState)
         {
-            var data = newState.Data;
             StartMovement(newState);
         }
 
@@ -82,11 +81,11 @@ namespace ThreeK.Game.Networking
                 m.OnEnd.AddListener(OnStateEnd);
                 m.SetTarget(data.Data, latency);
                 _currentMovement = m;
-                Sync(data.Data);
+                Sync(data);
             }
         }
 
-        private void Sync(object data)
+        private void Sync(MovementData data)
         {
             // Only local player should send message (clients should not send it)
             if (!isLocalPlayer)
@@ -204,31 +203,24 @@ namespace ThreeK.Game.Networking
         public NetworkInstanceId Target;
         public int Timestamp;
 
-        public void SetData(object data)
+        public void SetData(MovementData data)
         {
-            if (data is Vector3)
+            MovementType = data.MovementType.Name;
+            if (data.MovementType == typeof(Mover))
             {
-                Velocity = (Vector3)data;
-                MovementType = typeof(Mover).Name;
+                Velocity = (Vector3)data.Data;
             }
-            else if (data is Quaternion)
+            else if (data.MovementType == typeof(Spinner))
             {
-                Rotation = (Quaternion)data;
-                MovementType = typeof(Spinner).Name;
+                Rotation = (Quaternion)data.Data;
             }
-            else if (data is Transform)
+            else if (data.MovementType == typeof(Mover2))
             {
-                Target = ((Transform)data).GetComponent<NetworkIdentity>().netId;
-                MovementType = typeof(Mover2).Name;
+                Target = ((Transform)data.Data).GetComponent<NetworkIdentity>().netId;
             }
-            else if (data is Attackable)
+            else if (data.MovementType == typeof(Attacker))
             {
-                Target = ((Attackable)data).GetComponent<NetworkIdentity>().netId;
-                MovementType = typeof(Attacker).Name;
-            }
-            else if (data == null)
-            {
-                MovementType = typeof(Stander).Name;
+                Target = ((Transform)data.Data).GetComponent<NetworkIdentity>().netId;
             }
         }
 
@@ -250,7 +242,7 @@ namespace ThreeK.Game.Networking
             }
             var data = new MovementData()
             {
-                MovementType = Type.GetType(MovementType),
+                MovementType = Type.GetType("ThreeK.Game.Behavior.Movement." + MovementType),
                 Data = value
             };
             return data;

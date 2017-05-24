@@ -11,14 +11,12 @@ public class LobbyController : MonoBehaviour
     [Inject][HideInInspector] public MainUI MainUI;
 
     private NetworkManager _manager;
-    private string serverUrl;
 
     private void Start()
     {
         this.Inject();
         Debug.Log(Dispatcher.UID);
         _manager = FindObjectOfType<NetworkManager>();
-        serverUrl = GetComponentInChildren<InputField>().text;
     }
 
     public void OnStartHost()

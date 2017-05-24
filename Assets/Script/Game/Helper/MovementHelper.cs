@@ -17,9 +17,7 @@ namespace ThreeK.Game.Helper
             if (state is TurnState)
                 data.MovementType = typeof(Spinner);
             else if (state is MoveState)
-                data.MovementType = typeof(Mover);
-            else if (state is Move2TargetState)
-                data.MovementType = typeof(Mover2);
+                data.MovementType = (state is Move2TargetState) ? typeof(Mover2) : typeof(Mover);
             else if (state is AttackState)
                 data.MovementType = typeof(Attacker);
             else
