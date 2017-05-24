@@ -6,5 +6,6 @@ namespace ThreeK.Game.Data
     public class PlayerVO
     {
         public string HeroName;
+        public string[] Abilities;
     }
 }
