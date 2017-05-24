@@ -1,6 +1,8 @@
 ﻿using Adic;
 using Adic.Container;
 using Adic.Injection;
+using Assets.Script.Game.Data;
+using ThreeK.Game.Data;
 using ThreeK.Game.Helper;
 using UnityEngine;
 
@@ -9,25 +11,34 @@ namespace ThreeK.Game.StateMachine.Input
     public class InputFactory : IFactory
     {
         [Inject] public IInjectionContainer Container;
+        [Inject] public PlayerVO Player;
 
         private Plane _ground = new Plane(Vector3.up, Vector3.zero);
 
         public object Create(InjectionContext context)
         {
             IInput input = null;
-            if (context.memberType.Equals(typeof(MoveInput)))
+            if (context.memberType == typeof(MoveInput))
                 input = CreateMoveInput(context);
-            if (context.memberType.Equals(typeof(AttackInput)))
+            else if (context.memberType == typeof(AttackInput))
                 input = CreateAttackInput(context);
+            else if (context.memberType == typeof(CastInput))
+                input = CreateCastInput(context);
 
             if (input != null)
             {
-                //var subContainer = Container.Resolve<IInjectionContainer>("SubContainer");
-                //// Bind current input
-                //subContainer.Unbind(BindingHelper.Identifiers.CurrentInput);
-                //subContainer.Bind<IInput>().To(input).As(BindingHelper.Identifiers.CurrentInput);
                 InputHelper.CurrentInput = input;
             }
+            return input;
+        }
+
+        private IInput CreateCastInput(InjectionContext context)
+        {
+            CastInput input = null;
+            AbilityTypes type = (AbilityTypes)context.identifier;
+            if (type == AbilityTypes.NoTarget)
+                input = new CastInput(null);
+
             return input;
         }
 

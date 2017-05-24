@@ -21,6 +21,8 @@ namespace ThreeK.Game.UI
         public void OnSelected(string heroName)
         {
             PlayerData.HeroName = heroName;
+            // FIX ME LATER
+            PlayerData.Abilities = new[] { "BladeFury" };
             MainUI.HandleInput(new LobbyInput());
         }
     }
