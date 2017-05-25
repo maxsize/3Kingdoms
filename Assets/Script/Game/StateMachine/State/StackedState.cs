@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Adic;
 using Adic.Container;
+using Assets.Script.Game.Data;
 using ThreeK.Game.StateMachine.Input;
 using UnityEngine;
 using ThreeK.Game.Helper;
@@ -55,12 +56,25 @@ namespace ThreeK.Game.StateMachine.State
                 states.Add(Container.Resolve<IState>(typeof(MoveState)));
                 states.Add(Container.Resolve<IState>(typeof(TurnState)));
             }
-            if (input is AttackInput)
+            else if (input is AttackInput)
             {
                 // Create turn and move state
                 states.Add(Container.Resolve<IState>(typeof(AttackState)));
                 states.Add(Container.Resolve<IState>(typeof(Move2TargetState)));
                 states.Add(Container.Resolve<IState>(typeof(TurnState)));
+            }
+            else if (input is CastInput)
+            {
+                var cast = (CastInput) input;
+                if (cast.Ability.AbilityTypes.Contains(AbilityTypes.NoTarget))
+                    states.Add(Container.Resolve<IState>(typeof(CastState)));
+                if (cast.Ability.AbilityTypes.Contains(AbilityTypes.PointTarget) ||
+                    cast.Ability.AbilityTypes.Contains(AbilityTypes.UnitTarget))
+                {
+                    states.Add(Container.Resolve<IState>(typeof(CastState)));
+                    states.Add(Container.Resolve<IState>(typeof(CastingMoveState)));
+                    states.Add(Container.Resolve<IState>(typeof(TurnState)));   // Turn to target
+                }
             }
             return states;
         }

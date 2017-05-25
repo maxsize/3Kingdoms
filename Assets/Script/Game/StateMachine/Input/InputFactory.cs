@@ -1,4 +1,5 @@
-﻿using Adic;
+﻿using System.Linq;
+using Adic;
 using Adic.Container;
 using Adic.Injection;
 using Assets.Script.Game.Data;
@@ -12,6 +13,7 @@ namespace ThreeK.Game.StateMachine.Input
     {
         [Inject] public IInjectionContainer Container;
         [Inject] public PlayerVO Player;
+        [Inject] public Metadata Meta;
 
         private Plane _ground = new Plane(Vector3.up, Vector3.zero);
 
@@ -34,37 +36,62 @@ namespace ThreeK.Game.StateMachine.Input
 
         private IInput CreateCastInput(InjectionContext context)
         {
+            var ability = Meta.Abilities.ToList().Find(a => a.Name == Player.Abilities[0]);
             CastInput input = null;
             AbilityTypes type = (AbilityTypes)context.identifier;
             if (type == AbilityTypes.NoTarget)
-                input = new CastInput(null);
+                input = new CastInput(ability);
+            if (type == AbilityTypes.PointTarget)
+                input = new CastInput(GetHitPointOnGround(), ability);
+            if (type == AbilityTypes.UnitTarget)
+            {
+                var hit = GetHitEnemy();
+                if (hit == null)
+                    return null;
+                input = new CastInput(hit.transform, ability);
+            }
 
             return input;
         }
 
         private IInput CreateAttackInput(InjectionContext context)
         {
-            var ray = Camera.main.ScreenPointToRay(UnityEngine.Input.mousePosition);
-            //var dist = 50f;
-            var index = LayerMask.NameToLayer("Enemy");
-            LayerMask mask = 1 << index; 
-            RaycastHit hit;
-            if (!Physics.Raycast(ray, out hit, Mathf.Infinity, mask.value))
+            var hit = GetHitEnemy();
+            if (hit == null)
                 return null;
             return new AttackInput(hit.transform);
         }
 
         private IInput CreateMoveInput(InjectionContext context)
         {
+            var hitPoint = GetHitPointOnGround();
+            if (hitPoint == Vector3.zero)
+                return null;
+            return new MoveInput(hitPoint);
+        }
+
+        private Vector3 GetHitPointOnGround()
+        {
             var ray = Camera.main.ScreenPointToRay(UnityEngine.Input.mousePosition);
 
             float ent;
             if (!_ground.Raycast(ray, out ent))
-                return null;
+                return Vector3.zero;
             var hitPoint = ray.GetPoint(ent);
             Debug.DrawRay(ray.origin, ray.direction * ent, Color.green, 6);
-            //Debug.Log(hitPoint);
-            return new MoveInput(hitPoint);
+            return hitPoint;
+        }
+
+        private Transform GetHitEnemy()
+        {
+            var ray = Camera.main.ScreenPointToRay(UnityEngine.Input.mousePosition);
+            //var dist = 50f;
+            var index = LayerMask.NameToLayer("Enemy");
+            LayerMask mask = 1 << index;
+            RaycastHit hit;
+            if (!Physics.Raycast(ray, out hit, Mathf.Infinity, mask.value))
+                return null;
+            return hit.transform;
         }
     }
 }

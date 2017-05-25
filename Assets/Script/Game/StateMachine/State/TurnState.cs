@@ -31,7 +31,7 @@ namespace ThreeK.Game.StateMachine.State
 
         public override IState HandleInput(IInput input)
         {
-            if (input is AttackInput || input is MoveInput)
+            if (input is AttackInput || input is MoveInput || input is CastInput)
             {
                 return Container.Resolve<IState>(typeof(StackedState));
             }
