@@ -13,7 +13,14 @@ namespace ThreeK.Game.Behavior.Core
         [Inject] public EventDispatcher Dispatcher;
         public UnityEvent OnEnd = new UnityEvent();
 
+        protected object Data;
+
         private bool _injected;
+
+        public virtual void SetData(object data)
+        {
+            Data = data;
+        }
         
         public virtual void SetTarget(object target)
         {
