@@ -25,6 +25,7 @@ namespace Assets.Script.Game.Data
     public struct AbilityVO
     {
         public string Name;
+        public float Radius;
         public AbilityTypes[] AbilityTypes;
         public Effects[] Effects;
         public AbilityLevelVO[] Levels;
