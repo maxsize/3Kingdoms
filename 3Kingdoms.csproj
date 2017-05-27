@@ -159,6 +159,8 @@
     <Compile Include="Assets\Script\Game\Behavior\Core\MovementBehaviour.cs" />
     <Compile Include="Assets\Script\Game\Behavior\GameController.cs" />
     <Compile Include="Assets\Script\Game\Behavior\Movement\Attacker.cs" />
+    <Compile Include="Assets\Script\Game\Behavior\Movement\CastingMover.cs" />
+    <Compile Include="Assets\Script\Game\Behavior\Movement\Cast\BladeFury.cs" />
     <Compile Include="Assets\Script\Game\Behavior\Movement\CollisionDetector.cs" />
     <Compile Include="Assets\Script\Game\Behavior\Movement\Follower.cs" />
     <Compile Include="Assets\Script\Game\Behavior\Movement\Mover.cs" />
@@ -166,10 +168,12 @@
     <Compile Include="Assets\Script\Game\Behavior\Movement\Spinner.cs" />
     <Compile Include="Assets\Script\Game\Behavior\Movement\Stander.cs" />
     <Compile Include="Assets\Script\Game\Behavior\Player.cs" />
+    <Compile Include="Assets\Script\Game\Data\Metadata.cs" />
     <Compile Include="Assets\Script\Game\Data\PlayerVO.cs" />
     <Compile Include="Assets\Script\Game\Event\EventDispatcher.cs" />
     <Compile Include="Assets\Script\Game\Event\NetworkingEvents.cs" />
     <Compile Include="Assets\Script\Game\Helper\BindingHelper.cs" />
+    <Compile Include="Assets\Script\Game\Helper\DynamicInvoke.cs" />
     <Compile Include="Assets\Script\Game\Helper\InputHelper.cs" />
     <Compile Include="Assets\Script\Game\Helper\MovementHelper.cs" />
     <Compile Include="Assets\Script\Game\Networking\LocalPlayer.cs" />
@@ -177,6 +181,7 @@
     <Compile Include="Assets\Script\Game\Networking\NetworkUnit.cs" />
     <Compile Include="Assets\Script\Game\StateMachine\IStateMachine.cs" />
     <Compile Include="Assets\Script\Game\StateMachine\Input\AttackInput.cs" />
+    <Compile Include="Assets\Script\Game\StateMachine\Input\CastInput.cs" />
     <Compile Include="Assets\Script\Game\StateMachine\Input\EmptyInput.cs" />
     <Compile Include="Assets\Script\Game\StateMachine\Input\GameInput.cs" />
     <Compile Include="Assets\Script\Game\StateMachine\Input\IInput.cs" />
@@ -185,6 +190,8 @@
     <Compile Include="Assets\Script\Game\StateMachine\Input\MoveInput.cs" />
     <Compile Include="Assets\Script\Game\StateMachine\PushdownAutomation.cs" />
     <Compile Include="Assets\Script\Game\StateMachine\State\AttackState.cs" />
+    <Compile Include="Assets\Script\Game\StateMachine\State\CastState.cs" />
+    <Compile Include="Assets\Script\Game\StateMachine\State\CastingMoveState.cs" />
     <Compile Include="Assets\Script\Game\StateMachine\State\IState.cs" />
     <Compile Include="Assets\Script\Game\StateMachine\State\IStateStack.cs" />
     <Compile Include="Assets\Script\Game\StateMachine\State\IdleState.cs" />
@@ -197,11 +204,15 @@
     <Compile Include="Assets\Script\Game\StateMachine\StateMachine.cs" />
     <Compile Include="Assets\Script\Game\UI\HeroSelectionController.cs" />
     <Compile Include="Assets\Script\Game\UI\LobbyController.cs" />
+    <Compile Include="Assets\Script\Game\UI\MainGameController.cs" />
     <Compile Include="Assets\Script\Game\UI\MainUI.cs" />
     <Compile Include="Assets\Script\Game\UI\MainUIInputs.cs" />
     <Compile Include="Assets\Script\Game\UI\MainUIStates.cs" />
-    <Compile Include="Assets\Script\GameRoot.cs" />
     <Compile Include="Assets\Script\Game\UI\UIScaler.cs" />
+    <Compile Include="Assets\Script\GameRoot.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Assets\Resources\Data\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />

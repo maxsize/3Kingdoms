@@ -39,5 +39,6 @@ namespace Assets.Script.Game.Data
         public int MaxDamage;
         public int ManaCost;
         public int Cooldown;
+        public int Duration;
     }
 }

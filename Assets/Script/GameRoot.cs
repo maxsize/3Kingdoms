@@ -11,16 +11,25 @@ using UnityEngine.Networking;
 using ThreeK.Game.Helper;
 using ThreeK.Game.Data;
 using ThreeK.Game.Event;
+using System.IO;
+using Assets.Script.Game.Data;
 
 public class GameRoot : ContextRoot
 {
     private IInjectionContainer _container;
     public override void SetupContainers()
     {
+        var jsonStr = File.ReadAllText("Assets/Resources/Data/Abilities");
+        var meta = new Metadata()
+        {
+            Abilities = JsonUtility.FromJson<AbilityVO[]>(jsonStr)
+        };
+
         _container = AddContainer<InjectionContainer>(BindingHelper.Identifiers.MainContainer);
         _container.RegisterExtension<UnityBindingContainerExtension>()
             .RegisterExtension<CommanderContainerExtension>()
             .RegisterExtension<EventCallerContainerExtension>()
+            .Bind<Metadata>().To(meta)
             .Bind<ContextRoot>().To(this)
             .Bind<EventDispatcher>().ToSingleton()
             .Bind<InputFactory>().ToSingleton()
