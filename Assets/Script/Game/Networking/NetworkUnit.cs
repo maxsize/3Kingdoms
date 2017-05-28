@@ -7,6 +7,8 @@ using ThreeK.Game.StateMachine.State;
 using ThreeK.Game.Behavior.Core;
 using System.Collections.Generic;
 using System.Linq;
+using Adic;
+using Assets.Script.Game.Data;
 using Game.Behavior.Anim;
 using Game.Behavior.Movement;
 using ThreeK.Game.Behavior.Movement;
@@ -14,8 +16,16 @@ using ThreeK.Game.Helper;
 
 namespace ThreeK.Game.Networking
 {
+    [InjectFromContainer(BindingHelper.Identifiers.MainContainer)]
     public class NetworkUnit : NetworkBehaviour
     {
+        [Inject]
+        public Metadata Meta
+        {
+            get;
+            set;
+        }
+
         private List<MovementBehaviour> _movements;
         private MovementBehaviour _currentMovement;
         private PushdownAutomation _stateMachine;
@@ -23,6 +33,7 @@ namespace ThreeK.Game.Networking
 
         private void Start()
         {
+            this.Inject();
             _movements = GetComponents<MovementBehaviour>().ToList();
             for (int i = 0; i < _movements.Count; i++)
             {
@@ -34,10 +45,7 @@ namespace ThreeK.Game.Networking
                 _stateMachine = gameObject.AddComponent<Player>();
                 _stateMachine.OnStateChange.AddListener(OnStateChange);
                 gameObject.AddComponent<LocalPlayer>();
-                //GetComponent<Rigidbody>().isKinematic = false;
-                //GetComponent<Rigidbody>().mass = float.MaxValue;
                 GetComponent<CollisionDetector>().enabled = true;
-                //Camera.main.GetComponent<SmoothFollow>().target = transform;
             }
             else
             {
@@ -72,7 +80,7 @@ namespace ThreeK.Game.Networking
             {
                 _currentMovement.End();
                 _currentMovement.OnEnd.RemoveListener(OnStateEnd);
-                _currentMovement.enabled = false;
+                //_currentMovement.enabled = false;
             }
 
             var m = GetMovement(data.MovementType);
@@ -121,6 +129,11 @@ namespace ThreeK.Game.Networking
         private MovementBehaviour GetMovement(Type mType)
         {
             var found = _movements.Find(m => m.GetType() == mType);
+            if (found == null)
+            {
+                found = gameObject.AddComponent(mType)  as MovementBehaviour;
+                _movements.Add(found);
+            }
             return found;
         }
 
@@ -154,7 +167,7 @@ namespace ThreeK.Game.Networking
             var unit = clientObj.GetComponent<NetworkUnit>();
             if (unit.isLocalPlayer) return;     // This is the sender it self
 
-            var data = msg.GetData();
+            var data = msg.GetData(Meta);
             if (data.Data is NetworkInstanceId)
             {
                 // In this case, will need to get client transform
@@ -201,6 +214,7 @@ namespace ThreeK.Game.Networking
         public Quaternion Rotation;
         public Vector3 Velocity;
         public NetworkInstanceId Target;
+        public string AbilityName;
         public int Timestamp;
 
         public void SetData(MovementData data)
@@ -214,23 +228,33 @@ namespace ThreeK.Game.Networking
             {
                 Rotation = (Quaternion)data.Data;
             }
-            else if (data.MovementType == typeof(Mover2))
+            else if (data.MovementType == typeof(Mover2) ||
+                data.MovementType == typeof(CastingMover) ||
+                data.MovementType == typeof(Attacker))
             {
                 Target = ((Transform)data.Data).GetComponent<NetworkIdentity>().netId;
             }
-            else if (data.MovementType == typeof(Attacker))
+
+            if (data.Ability.Name != null)
             {
-                Target = ((Transform)data.Data).GetComponent<NetworkIdentity>().netId;
+                // Casting ability, sync ability info
+                AbilityName = data.Ability.Name;
+                if (data.Ability.IsUnitTarget())
+                    Target = ((Transform)data.Data).GetComponent<NetworkIdentity>().netId;
+                if (data.Ability.IsPointTarget())
+                    Position = (Vector3) data.Data;
             }
         }
 
-        public MovementData GetData()
+        public MovementData GetData(Metadata meta)
         {
             object value = null;
+            AbilityVO ability = default(AbilityVO);
             switch (MovementType)
             {
                 case "Attacker":
                 case "Mover2":
+                case "CastingMover":
                     value = Target;
                     break;
                 case "Mover":
@@ -239,11 +263,21 @@ namespace ThreeK.Game.Networking
                 case "Spinner":
                     value = Rotation;
                     break;
+                default:
+                    ability = meta.Abilities.Find(a => a.Name == AbilityName);
+                    if (ability.IsUnitTarget())
+                        value = Target;
+                    if (ability.IsPointTarget())
+                        value = Position;
+                    break;
             }
             var data = new MovementData()
             {
-                MovementType = Type.GetType("ThreeK.Game.Behavior.Movement." + MovementType),
-                Data = value
+                MovementType = AbilityName == null ? 
+                Type.GetType("ThreeK.Game.Behavior.Movement." + MovementType) :
+                Type.GetType("ThreeK.Game.Behavior.Movement.Cast." + MovementType),
+                Data = value,
+                Ability = ability
             };
             return data;
         }

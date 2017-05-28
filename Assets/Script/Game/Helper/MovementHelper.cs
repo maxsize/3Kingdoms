@@ -28,8 +28,8 @@ namespace ThreeK.Game.Helper
             }
             else if (state is CastState)
             {
-                data.MovementType = typeof(CastingMover);
                 data.Ability = ((CastState)state).Ability;
+                data.MovementType = Type.GetType("ThreeK.Game.Behavior.Movement.Cast." + data.Ability.Name);
             }
             else
                 data.MovementType = typeof(Stander);

@@ -2,6 +2,7 @@
 using UnityEngine.Events;
 using System;
 using Adic;
+using Assets.Script.Game.Data;
 using ThreeK.Game.Helper;
 using ThreeK.Game.Event;
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Assets.Script.Game.Data
 {
@@ -16,9 +17,15 @@ namespace Assets.Script.Game.Data
     }
 
     [Serializable]
-    public struct Metadata
+    public class Metadata
     {
-        public AbilityVO[] Abilities;
+        public List<AbilityVO> Abilities;
+    }
+
+    [Serializable]
+    public struct AbilitiesVO
+    {
+        public List<AbilityVO> Abilities;
     }
 
     [Serializable]
@@ -26,9 +33,24 @@ namespace Assets.Script.Game.Data
     {
         public string Name;
         public float Radius;
-        public AbilityTypes[] AbilityTypes;
-        public Effects[] Effects;
-        public AbilityLevelVO[] Levels;
+        public List<int> AbilityTypes;
+        public List<int> Effects;
+        public List<AbilityLevelVO> Levels;
+
+        public bool IsNoTarget()
+        {
+            return AbilityTypes.Contains(0);
+        }
+
+        public bool IsUnitTarget()
+        {
+            return AbilityTypes.Contains(1);
+        }
+
+        public bool IsPointTarget()
+        {
+            return AbilityTypes.Contains(2);
+        }
     }
 
     [Serializable]

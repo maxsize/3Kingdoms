@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Reflection;
 using Adic;
 using Adic.Container;
+using Assets.Script.Game.Data;
 using ThreeK.Game.Helper;
 using ThreeK.Game.StateMachine;
 using ThreeK.Game.StateMachine.Input;
@@ -28,24 +30,18 @@ namespace ThreeK.Game.Networking
                 if (CreateAndHandleInput(typeof(AttackInput))) return;
                 if (CreateAndHandleInput(typeof(MoveInput))) return;
             }
+            if (Input.GetKeyDown(KeyCode.Alpha1))
+            {
+                if (CreateAndHandleInput(typeof(CastInput))) return;
+            }
         }
 
-        private bool CreateAndHandleInput(Type inputType)
+        private bool CreateAndHandleInput(Type inputType, object identifier = null)
         {
-            IInput input = null;
-            //if (inputType == typeof(AttackInput))
-            //{
-            //    AttackInput attackInput = MainContainer.Resolve<AttackInput>();
-            //    input = attackInput;
-            //}
-            //else if (inputType == typeof(MoveInput))
-            //{
-            //    MoveInput moveInput = MainContainer.Resolve<MoveInput>();
-            //    input = moveInput;
-            //}
+            IInput input = identifier != null ?
+                MainContainer.Resolve(inputType, identifier) as IInput :
+                MainContainer.Resolve(inputType) as IInput;
 
-            input = DynamicInvoke.Invoke(MainContainer, inputType, "Resolve") as IInput;
-            
             if (input != null)
                 _machine.HandleInput(input);
             return input != null;
