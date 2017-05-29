@@ -23,7 +23,6 @@ namespace ThreeK.Game.UI
             PlayerData.HeroName = heroName;
             // FIX ME LATER
             PlayerData.Abilities = new[] { "BladeFury" };
-            Debug.LogError(heroName + " selected.");
             MainUI.HandleInput(new LobbyInput());
         }
     }

@@ -15,9 +15,9 @@ namespace ThreeK.Game.Behavior.Movement.Cast
         [Inject]
         public Metadata Meta;
 
-        //private static readonly Vector3 RotateSpeed = Vector3.up * 15.1f;
+        private static readonly Vector3 RotateSpeed = Vector3.up * 15.1f;
 
-        protected override void SetTarget()
+        protected override void SetTarget(float latency)
         {
             var ability = Meta.Abilities.ToList().Find(a => a.Name == GetType().Name);
             if (ability.Name == null)
@@ -25,7 +25,7 @@ namespace ThreeK.Game.Behavior.Movement.Cast
                 Debug.LogError(string.Format("Ability {0} is not defined.", GetType().Name));
                 return;
             }
-            var duration = ability.Levels[0].Duration;
+            var duration = ability.Levels[0].Duration - (latency / 1000);
             StartCoroutine(Wait(duration));
             StartCoroutine(LateEnd());
             gameObject.AddComponent<ParticleSystem>();

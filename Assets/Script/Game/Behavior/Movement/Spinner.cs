@@ -8,7 +8,7 @@ namespace ThreeK.Game.Behavior.Movement
 {
     public class Spinner : MovementBehaviour {
 
-        public float TurnSpeed = 400f;
+        public float TurnSpeed = 700f;
 
         private Quaternion _targetQuaternion;
         private Vector3 _position = Vector3.zero;
@@ -25,6 +25,11 @@ namespace ThreeK.Game.Behavior.Movement
             animator.SetBool("Moving", false);
             animator.SetBool("Running", false);
             TurnToTarget(latency);  // delay compensation
+        }
+
+        public override void End()
+        {
+            enabled = false;
         }
 
         private void FixedUpdate()

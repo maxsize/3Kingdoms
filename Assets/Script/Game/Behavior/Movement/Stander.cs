@@ -24,7 +24,7 @@ namespace ThreeK.Game.Behavior.Movement
             enabled = false;
         }
 
-        protected override void SetTarget()
+        protected override void SetTarget(float latency)
         {
             var animator = GetComponent<Animator>();
             animator.SetBool("Moving", false);

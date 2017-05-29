@@ -10,7 +10,7 @@ namespace ThreeK.Game.Behavior.Movement
 
         protected override void SetTarget(Transform target, float latency)
         {
-            SetTarget();
+            SetTarget(latency);
             var animator = GetComponent<Animator>();
             animator.SetTrigger(ATTACK1_TRIGGER);
             StartCoroutine(Wait(1.2f));

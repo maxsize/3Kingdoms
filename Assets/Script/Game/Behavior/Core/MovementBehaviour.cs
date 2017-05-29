@@ -39,7 +39,7 @@ namespace ThreeK.Game.Behavior.Core
             if (target is Quaternion) SetTarget((Quaternion)target, latency);
             if (target is Vector3) SetTarget((Vector3)target, latency);
             if (target is Transform) SetTarget((Transform)target, latency);
-            if (target == null) SetTarget();
+            if (target == null) SetTarget(latency);
             enabled = true;
             Dispatcher.DispatchWith<TargetChangeEvent>(GetType().Name);
         }
@@ -51,7 +51,7 @@ namespace ThreeK.Game.Behavior.Core
         {
         }
 
-        protected virtual void SetTarget()
+        protected virtual void SetTarget(float latency)
         {
         }
 

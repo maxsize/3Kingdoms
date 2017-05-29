@@ -39,17 +39,17 @@ namespace Assets.Script.Game.Data
 
         public bool IsNoTarget()
         {
-            return AbilityTypes.Contains(0);
+            return AbilityTypes != null && AbilityTypes.Contains(0);
         }
 
         public bool IsUnitTarget()
         {
-            return AbilityTypes.Contains(1);
+            return AbilityTypes != null && AbilityTypes.Contains(1);
         }
 
         public bool IsPointTarget()
         {
-            return AbilityTypes.Contains(2);
+            return AbilityTypes != null && AbilityTypes.Contains(2);
         }
     }
 

@@ -30,7 +30,16 @@ namespace ThreeK.Game.StateMachine.State
 
         public override object Data
         {
-            get { return Ability; }
+            get
+            {
+                if (Ability.IsNoTarget())
+                    return null;
+                if (Ability.IsPointTarget())
+                    return Point;
+                if (Ability.IsUnitTarget())
+                    return Target;
+                return null;
+            }
         }
     }
 }

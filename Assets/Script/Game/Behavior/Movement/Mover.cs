@@ -27,6 +27,11 @@ namespace ThreeK.Game.Behavior.Movement
             StartMovement();
         }
 
+        public override void End()
+        {
+            enabled = false;
+        }
+
         protected virtual bool IsReached()
         {
             var trans = transform;

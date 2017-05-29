@@ -11,7 +11,6 @@ namespace ThreeK.Game.StateMachine.Input
 {
     public class InputFactory : IFactory
     {
-        [Inject] public IInjectionContainer Container;
         [Inject] public PlayerVO Player;
         [Inject] public Metadata Meta;
 
@@ -36,14 +35,15 @@ namespace ThreeK.Game.StateMachine.Input
 
         private IInput CreateCastInput(InjectionContext context)
         {
+            // Assuming using BladeFury
+            var type = Meta.Abilities[0].AbilityTypes[0];
             var ability = Meta.Abilities.ToList().Find(a => a.Name == Player.Abilities[0]);
             CastInput input = null;
-            AbilityTypes type = (AbilityTypes)context.identifier;
-            if (type == AbilityTypes.NoTarget)
+            if (type == (int)AbilityTypes.NoTarget)
                 input = new CastInput(ability);
-            if (type == AbilityTypes.PointTarget)
+            if (type == (int)AbilityTypes.PointTarget)
                 input = new CastInput(GetHitPointOnGround(), ability);
-            if (type == AbilityTypes.UnitTarget)
+            if (type == (int)AbilityTypes.UnitTarget)
             {
                 var hit = GetHitEnemy();
                 if (hit == null)

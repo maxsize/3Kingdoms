@@ -265,15 +265,18 @@ namespace ThreeK.Game.Networking
                     break;
                 default:
                     ability = meta.Abilities.Find(a => a.Name == AbilityName);
-                    if (ability.IsUnitTarget())
-                        value = Target;
-                    if (ability.IsPointTarget())
-                        value = Position;
+                    if (ability.Name != null)
+                    {
+                        if (ability.IsUnitTarget())
+                            value = Target;
+                        if (ability.IsPointTarget())
+                            value = Position;
+                    }
                     break;
             }
             var data = new MovementData()
             {
-                MovementType = AbilityName == null ? 
+                MovementType = string.IsNullOrEmpty(AbilityName) ? 
                 Type.GetType("ThreeK.Game.Behavior.Movement." + MovementType) :
                 Type.GetType("ThreeK.Game.Behavior.Movement.Cast." + MovementType),
                 Data = value,
