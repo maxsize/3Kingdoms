@@ -19,10 +19,11 @@ public class GameRoot : ContextRoot
     private IInjectionContainer _container;
     public override void SetupContainers()
     {
-        var jsonStr = File.ReadAllText("Assets/Resources/Data/Abilities");
+        var file = Resources.Load<TextAsset>("Data/Abilities");
+        var jsonStr = file.text;
         var meta = new Metadata()
         {
-            Abilities = JsonUtility.FromJson<AbilityVO[]>(jsonStr)
+            Abilities = JsonUtility.FromJson<AbilitiesVO>(jsonStr).Abilities
         };
 
         _container = AddContainer<InjectionContainer>(BindingHelper.Identifiers.MainContainer);
@@ -32,13 +33,10 @@ public class GameRoot : ContextRoot
             .Bind<Metadata>().To(meta)
             .Bind<ContextRoot>().To(this)
             .Bind<EventDispatcher>().ToSingleton()
-            .Bind<InputFactory>().ToSingleton()
             .Bind<PlayerVO>().ToSingleton()
             .Bind<AttackInput>().ToFactory<InputFactory>()
             .Bind<MoveInput>().ToFactory<InputFactory>()
-            //.Bind<IStateMachine>().ToPrefab<Player>("Warrior3/Hammer/Prefabs/Hammer").As("Hammer")
-            //.Bind<IStateMachine>().ToPrefab<Player>("Warrior3/Crossbow/Prefabs/Crossbow").As("Crossbow")
-            //.Bind<IStateMachine>().ToPrefab<Player>("Warrior3/Swordsman/Prefabs/Swordsman").As("Swordsman")
+            .Bind<CastInput>().ToFactory<InputFactory>()
             .Bind<NetworkManager>().ToGameObject("NetworkManager")
             .Bind<GameController>().ToSingleton();
     }

@@ -15,7 +15,7 @@ namespace ThreeK.Game.Behavior.Movement.Cast
         [Inject]
         public Metadata Meta;
 
-        private static readonly Vector3 RotateSpeed = Vector3.up * 15.1f;
+        //private static readonly Vector3 RotateSpeed = Vector3.up * 15.1f;
 
         protected override void SetTarget()
         {

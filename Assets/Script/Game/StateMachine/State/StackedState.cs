@@ -66,10 +66,10 @@ namespace ThreeK.Game.StateMachine.State
             else if (input is CastInput)
             {
                 var cast = (CastInput) input;
-                if (cast.Ability.AbilityTypes.Contains(AbilityTypes.NoTarget))
+                if (cast.Ability.AbilityTypes.Contains((int)AbilityTypes.NoTarget))
                     states.Add(Container.Resolve<IState>(typeof(CastState)));
-                if (cast.Ability.AbilityTypes.Contains(AbilityTypes.PointTarget) ||
-                    cast.Ability.AbilityTypes.Contains(AbilityTypes.UnitTarget))
+                if (cast.Ability.AbilityTypes.Contains((int)AbilityTypes.PointTarget) ||
+                    cast.Ability.AbilityTypes.Contains((int)AbilityTypes.UnitTarget))
                 {
                     states.Add(Container.Resolve<IState>(typeof(CastState)));
                     states.Add(Container.Resolve<IState>(typeof(CastingMoveState)));

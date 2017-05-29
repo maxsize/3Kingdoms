@@ -28,9 +28,9 @@ namespace ThreeK.Game.StateMachine.State
         {
             get
             {
-                if (Ability.AbilityTypes.Contains(AbilityTypes.PointTarget))
+                if (Ability.AbilityTypes.Contains((int)AbilityTypes.PointTarget))
                     return _point;
-                if (Ability.AbilityTypes.Contains(AbilityTypes.UnitTarget))
+                if (Ability.AbilityTypes.Contains((int)AbilityTypes.UnitTarget))
                     return _target;
                 return null;
             }
