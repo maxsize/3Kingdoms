@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Assets.Script.Game.Data;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,8 +12,11 @@ namespace ThreeK.Game.StateMachine.Input
     /// </summary>
     public class PointInput : GameInput
     {
-        public PointInput(Vector3 data) : base(data)
+        public AbilityVO Ability { get; private set; }
+
+        public PointInput(Vector3 data, AbilityVO ability) : base(data)
         {
+            Ability = ability;
         }
     }
 }

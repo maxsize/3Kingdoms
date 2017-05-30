@@ -186,6 +186,9 @@
     <Compile Include="Assets\Script\Game\StateMachine\Input\InputFactory.cs" />
     <Compile Include="Assets\Script\Game\StateMachine\Input\InputResolver.cs" />
     <Compile Include="Assets\Script\Game\StateMachine\Input\MoveInput.cs" />
+    <Compile Include="Assets\Script\Game\StateMachine\Input\PointInput.cs" />
+    <Compile Include="Assets\Script\Game\StateMachine\Input\PreCastInput.cs" />
+    <Compile Include="Assets\Script\Game\StateMachine\Input\SelectInput.cs" />
     <Compile Include="Assets\Script\Game\StateMachine\PushdownAutomation.cs" />
     <Compile Include="Assets\Script\Game\StateMachine\State\AttackState.cs" />
     <Compile Include="Assets\Script\Game\StateMachine\State\CastState.cs" />
@@ -196,6 +199,7 @@
     <Compile Include="Assets\Script\Game\StateMachine\State\MonoState.cs" />
     <Compile Include="Assets\Script\Game\StateMachine\State\Move2TargetState.cs" />
     <Compile Include="Assets\Script\Game\StateMachine\State\MoveState.cs" />
+    <Compile Include="Assets\Script\Game\StateMachine\State\PreCastState.cs" />
     <Compile Include="Assets\Script\Game\StateMachine\State\StackedState.cs" />
     <Compile Include="Assets\Script\Game\StateMachine\State\State.cs" />
     <Compile Include="Assets\Script\Game\StateMachine\State\TurnState.cs" />

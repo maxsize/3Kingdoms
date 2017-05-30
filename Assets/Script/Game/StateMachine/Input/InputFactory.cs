@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Adic;
 using Adic.Container;
 using Adic.Injection;
@@ -14,6 +15,9 @@ namespace ThreeK.Game.StateMachine.Input
         [Inject] public PlayerVO Player;
         [Inject] public Metadata Meta;
 
+        private const string LAYER_ENEMY = "Enemy";
+        private const string LAYER_ALLY = "Ally";
+
         private Plane _ground = new Plane(Vector3.up, Vector3.zero);
 
         public object Create(InjectionContext context)
@@ -27,11 +31,34 @@ namespace ThreeK.Game.StateMachine.Input
                 input = CreatePreCastInput(context);
             else if (context.memberType == typeof(CastInput))
                 input = CreateCastInput(context);
+            else if (context.memberType == typeof(PointInput))
+                input = CreatePointInput(context, InputHelper.CurrentInput);
 
             if (input != null)
             {
                 InputHelper.CurrentInput = input;
             }
+            return input;
+        }
+
+        private IInput CreatePointInput(InjectionContext context, IInput currentInput)
+        {
+            AbilityVO ability = default(AbilityVO);
+            if (currentInput is PreCastInput)
+                ability = (AbilityVO)((PreCastInput)currentInput).Data;
+            var input = new PointInput(GetHitPointOnGround(), ability);
+            return input;
+        }
+
+        private IInput CreateSelectInput(InjectionContext context, IInput currentInput)
+        {
+            AbilityVO ability = default(AbilityVO);
+            if (currentInput is PreCastInput)
+                ability = (AbilityVO)((PreCastInput)currentInput).Data;
+
+            var target = GetHitUnit();
+            target = target == null ? GetHitUnit(LAYER_ALLY):target;
+            var input = new SelectInput(target, ability);
             return input;
         }
 
@@ -54,7 +81,7 @@ namespace ThreeK.Game.StateMachine.Input
                 input = new CastInput(GetHitPointOnGround(), ability);
             if (type == (int)AbilityTypes.UnitTarget)
             {
-                var hit = GetHitEnemy();
+                var hit = GetHitUnit();
                 if (hit == null)
                     return null;
                 input = new CastInput(hit.transform, ability);
@@ -65,7 +92,7 @@ namespace ThreeK.Game.StateMachine.Input
 
         private IInput CreateAttackInput(InjectionContext context)
         {
-            var hit = GetHitEnemy();
+            var hit = GetHitUnit();
             if (hit == null)
                 return null;
             return new AttackInput(hit.transform);
@@ -91,11 +118,11 @@ namespace ThreeK.Game.StateMachine.Input
             return hitPoint;
         }
 
-        private Transform GetHitEnemy()
+        private Transform GetHitUnit(string layerMask = LAYER_ENEMY)
         {
             var ray = Camera.main.ScreenPointToRay(UnityEngine.Input.mousePosition);
             //var dist = 50f;
-            var index = LayerMask.NameToLayer("Enemy");
+            var index = LayerMask.NameToLayer(layerMask);
             LayerMask mask = 1 << index;
             RaycastHit hit;
             if (!Physics.Raycast(ray, out hit, Mathf.Infinity, mask.value))

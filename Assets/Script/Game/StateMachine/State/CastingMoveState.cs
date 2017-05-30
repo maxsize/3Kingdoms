@@ -18,19 +18,26 @@ namespace ThreeK.Game.StateMachine.State
 
         public CastingMoveState()
         {
-            var input = (CastInput) InputHelper.CurrentInput;
-            _point = input.Point;
-            _target = input.Target;
-            Ability = input.Ability;
+            var input = InputHelper.CurrentInput;
+            if (input is PointInput)
+            {
+                _point = (Vector3)input.Data;
+                Ability = ((PointInput)input).Ability;
+            }
+            else if (input is SelectInput)
+            {
+                _target = (Transform)input.Data;
+                Ability = ((SelectInput)input).Ability;
+            }
         }
 
         public override object Data
         {
             get
             {
-                if (Ability.AbilityTypes.Contains((int)AbilityTypes.PointTarget))
+                if (Ability.IsPointTarget())
                     return _point;
-                if (Ability.AbilityTypes.Contains((int)AbilityTypes.UnitTarget))
+                if (Ability.IsUnitTarget())
                     return _target;
                 return null;
             }

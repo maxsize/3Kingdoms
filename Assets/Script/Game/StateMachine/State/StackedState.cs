@@ -66,17 +66,24 @@ namespace ThreeK.Game.StateMachine.State
             else if (input is PreCastInput)
             {
                 var ability = (AbilityVO)input.Data;
-                if (ability.AbilityTypes.Contains((int)AbilityTypes.NoTarget))
+                if (ability.IsNoTarget())
                     states.Add(Container.Resolve<IState>(typeof(CastState)));
-                if (ability.AbilityTypes.Contains((int)AbilityTypes.PointTarget) ||
-                    ability.AbilityTypes.Contains((int)AbilityTypes.UnitTarget))
+                if (ability.IsPointTarget() ||
+                    ability.IsUnitTarget())
                 {
                     states.Add(Container.Resolve<IState>(typeof(PreCastState)));
                 }
             }
             else if (input is PointInput || input is SelectInput)
             {
-                
+                var ability = (AbilityVO)input.Data;
+                if (ability.IsPointTarget() ||
+                    (ability.IsUnitTarget() && input is SelectInput))
+                {
+                    states.Add(Container.Resolve<IState>(typeof(CastState)));
+                    states.Add(Container.Resolve<IState>(typeof(CastingMoveState)));
+                    states.Add(Container.Resolve<IState>(typeof(TurnState)));   // Turn to target
+                }
             }
             //else if (input is CastInput)
             //{
