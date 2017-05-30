@@ -25,7 +25,7 @@ namespace ThreeK.Game.Networking
         // Update is called once per frame
         void Update()
         {
-            if (Input.GetKeyDown(KeyCode.Mouse0))
+            if (Input.GetKeyDown(KeyCode.Mouse1))
             {
                 if (CreateAndHandleInput(typeof(AttackInput))) return;
                 if (CreateAndHandleInput(typeof(MoveInput))) return;

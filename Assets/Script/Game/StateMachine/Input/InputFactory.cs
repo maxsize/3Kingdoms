@@ -23,6 +23,8 @@ namespace ThreeK.Game.StateMachine.Input
                 input = CreateMoveInput(context);
             else if (context.memberType == typeof(AttackInput))
                 input = CreateAttackInput(context);
+            else if (context.memberType == typeof(PreCastInput))
+                input = CreatePreCastInput(context);
             else if (context.memberType == typeof(CastInput))
                 input = CreateCastInput(context);
 
@@ -30,6 +32,13 @@ namespace ThreeK.Game.StateMachine.Input
             {
                 InputHelper.CurrentInput = input;
             }
+            return input;
+        }
+
+        private IInput CreatePreCastInput(InjectionContext context)
+        {
+            var ability = Meta.Abilities.ToList().Find(a => a.Name == Player.Abilities[1]);
+            var input = new PreCastInput(ability);
             return input;
         }
 

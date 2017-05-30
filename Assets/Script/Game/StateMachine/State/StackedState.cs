@@ -16,7 +16,7 @@ namespace ThreeK.Game.StateMachine.State
         [Inject]
         public IInjectionContainer Container;
 
-        private List<IState> _stack;
+        private readonly List<IState> _stack;
         public StackedState()
         {
             _stack = new List<IState>();
@@ -63,19 +63,34 @@ namespace ThreeK.Game.StateMachine.State
                 states.Add(Container.Resolve<IState>(typeof(Move2TargetState)));
                 states.Add(Container.Resolve<IState>(typeof(TurnState)));
             }
-            else if (input is CastInput)
+            else if (input is PreCastInput)
             {
-                var cast = (CastInput) input;
-                if (cast.Ability.AbilityTypes.Contains((int)AbilityTypes.NoTarget))
+                var ability = (AbilityVO)input.Data;
+                if (ability.AbilityTypes.Contains((int)AbilityTypes.NoTarget))
                     states.Add(Container.Resolve<IState>(typeof(CastState)));
-                if (cast.Ability.AbilityTypes.Contains((int)AbilityTypes.PointTarget) ||
-                    cast.Ability.AbilityTypes.Contains((int)AbilityTypes.UnitTarget))
+                if (ability.AbilityTypes.Contains((int)AbilityTypes.PointTarget) ||
+                    ability.AbilityTypes.Contains((int)AbilityTypes.UnitTarget))
                 {
-                    states.Add(Container.Resolve<IState>(typeof(CastState)));
-                    states.Add(Container.Resolve<IState>(typeof(CastingMoveState)));
-                    states.Add(Container.Resolve<IState>(typeof(TurnState)));   // Turn to target
+                    states.Add(Container.Resolve<IState>(typeof(PreCastState)));
                 }
             }
+            else if (input is PointInput || input is SelectInput)
+            {
+                
+            }
+            //else if (input is CastInput)
+            //{
+            //    var cast = (CastInput) input;
+            //    if (cast.Ability.AbilityTypes.Contains((int)AbilityTypes.NoTarget))
+            //        states.Add(Container.Resolve<IState>(typeof(CastState)));
+            //    if (cast.Ability.AbilityTypes.Contains((int)AbilityTypes.PointTarget) ||
+            //        cast.Ability.AbilityTypes.Contains((int)AbilityTypes.UnitTarget))
+            //    {
+            //        states.Add(Container.Resolve<IState>(typeof(CastState)));
+            //        states.Add(Container.Resolve<IState>(typeof(CastingMoveState)));
+            //        states.Add(Container.Resolve<IState>(typeof(TurnState)));   // Turn to target
+            //    }
+            //}
             return states;
         }
     }
