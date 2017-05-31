@@ -20,6 +20,7 @@ namespace ThreeK.Game.StateMachine.State
 
         protected override Vector3 GetDestination(IInput input)
         {
+            if (input.Data is Vector3) return (Vector3)input.Data;
             return ((Transform)input.Data).position;
         }
     }

@@ -37,6 +37,9 @@ public class GameRoot : ContextRoot
             .Bind<AttackInput>().ToFactory<InputFactory>()
             .Bind<MoveInput>().ToFactory<InputFactory>()
             .Bind<CastInput>().ToFactory<InputFactory>()
+            .Bind<PreCastInput>().ToFactory<InputFactory>()
+            .Bind<PointInput>().ToFactory<InputFactory>()
+            .Bind<SelectInput>().ToFactory<InputFactory>()
             .Bind<NetworkManager>().ToGameObject("NetworkManager")
             .Bind<GameController>().ToSingleton();
     }

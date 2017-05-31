@@ -36,6 +36,7 @@ public class Player : PushdownAutomation
             .Bind<IState>().To<MoveState>().As(typeof(MoveState))
             .Bind<IState>().To<TurnState>().As(typeof(TurnState))
             .Bind<IState>().To<CastState>().As(typeof(CastState))
+            .Bind<IState>().To<PreCastState>().As(typeof(PreCastState))
             .Bind<IState>().To<CastingMoveState>().As(typeof(CastingMoveState))
             .Bind<IState>().To<StackedState>().As(typeof(StackedState))
             .Bind<IState>().To<Move2TargetState>().As(typeof(Move2TargetState))

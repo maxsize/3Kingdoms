@@ -17,10 +17,23 @@ namespace ThreeK.Game.StateMachine.State
 
         public CastState()
         {
-            var input = (CastInput)InputHelper.CurrentInput;
-            Point = input.Point;
-            Target = input.Target;
-            Ability = input.Ability;
+            var input = InputHelper.CurrentInput;
+            if (input is CastInput)
+            {
+                Point = ((CastInput)input).Point;
+                Target = ((CastInput)input).Target;
+                Ability = ((CastInput)input).Ability;
+            }
+            else if (input is PointInput)
+            {
+                Point = (Vector3)((PointInput)input).Data;
+                Ability = ((PointInput)input).Ability;
+            }
+            else if (input is SelectInput)
+            {
+                Target = ((SelectInput)input).Data as Transform;
+                Ability = ((SelectInput)input).Ability;
+            }
         }
 
         public override IState HandleInput(IInput input)

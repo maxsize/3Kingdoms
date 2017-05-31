@@ -7,12 +7,16 @@ using ThreeK.Game.Helper;
 using ThreeK.Game.StateMachine;
 using ThreeK.Game.StateMachine.Input;
 using UnityEngine;
+using System.Linq;
+using ThreeK.Game.Data;
 
 namespace ThreeK.Game.Networking
 {
     public class LocalPlayer : InjectableBehaviour
     {
         [Inject] public IInjectionContainer MainContainer;
+        [Inject] public Metadata Meta;
+        [Inject] public PlayerVO Player;
 
         private IStateMachine _machine;
 
@@ -30,9 +34,18 @@ namespace ThreeK.Game.Networking
                 if (CreateAndHandleInput(typeof(AttackInput))) return;
                 if (CreateAndHandleInput(typeof(MoveInput))) return;
             }
-            if (Input.GetKeyDown(KeyCode.Alpha1))
+            if (Input.GetKeyDown(KeyCode.Q) || Input.GetKeyDown(KeyCode.W))
             {
-                if (CreateAndHandleInput(typeof(CastInput))) return;
+                var ability = Meta.Abilities.ToList().Find(a => a.Name == Player.CastingAbility);
+                if (ability.IsNoTarget())
+                    CreateAndHandleInput(typeof(CastInput));
+                else
+                    CreateAndHandleInput(typeof(PreCastInput));
+            }
+            if (Input.GetKeyDown(KeyCode.Mouse0))
+            {
+                if (CreateAndHandleInput(typeof(SelectInput))) return;
+                if (CreateAndHandleInput(typeof(PointInput))) return;
             }
         }
 

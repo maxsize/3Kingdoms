@@ -37,6 +37,21 @@ namespace Assets.Script.Game.Data
         public List<int> Effects;
         public List<AbilityLevelVO> Levels;
 
+        public bool ToAlly()
+        {
+            return Effects != null && Effects.Contains(1);
+        }
+
+        public bool ToEnemy()
+        {
+            return Effects != null && Effects.Contains(0);
+        }
+
+        public bool IsNull()
+        {
+            return string.IsNullOrEmpty(Name);
+        }
+
         public bool IsNoTarget()
         {
             return AbilityTypes != null && AbilityTypes.Contains(0);

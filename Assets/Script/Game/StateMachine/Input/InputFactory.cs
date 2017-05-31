@@ -33,6 +33,8 @@ namespace ThreeK.Game.StateMachine.Input
                 input = CreateCastInput(context);
             else if (context.memberType == typeof(PointInput))
                 input = CreatePointInput(context, InputHelper.CurrentInput);
+            else if (context.memberType == typeof(SelectInput))
+                input = CreateSelectInput(context, InputHelper.CurrentInput);
 
             if (input != null)
             {
@@ -56,10 +58,14 @@ namespace ThreeK.Game.StateMachine.Input
             if (currentInput is PreCastInput)
                 ability = (AbilityVO)((PreCastInput)currentInput).Data;
 
-            var target = GetHitUnit();
-            target = target == null ? GetHitUnit(LAYER_ALLY):target;
-            var input = new SelectInput(target, ability);
-            return input;
+            var enemy = GetHitUnit();
+            var ally = GetHitUnit(LAYER_ALLY);
+            if (ability.IsUnitTarget() || ability.IsNull())
+            {
+                if (ability.ToEnemy() && enemy) return new SelectInput(enemy, ability);
+                if (ability.ToAlly() && ally) return new SelectInput(ally, ability);
+            }
+            return null;
         }
 
         private IInput CreatePreCastInput(InjectionContext context)
