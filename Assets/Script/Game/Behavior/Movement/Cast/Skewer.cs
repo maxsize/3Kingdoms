@@ -15,7 +15,7 @@ namespace ThreeK.Game.Behavior.Movement.Cast
         [Inject]
         public Metadata Meta;
 
-        private float _speed = 5f;
+        private float _speed = 15f;
         private Vector3 _destination;
 
         protected override void SetTarget(Vector3 point, float latency)
@@ -45,7 +45,9 @@ namespace ThreeK.Game.Behavior.Movement.Cast
 
         private bool IsReached()
         {
-            return Vector3.Distance(_destination, transform.position) < 0.2f;
+            var distance = Vector3.Distance(_destination, transform.position);
+            Debug.Log(string.Format("Dis: {0}, {1}, {2}", _destination, transform.position, distance));
+            return distance < 0.2f;
         }
 
         public override void End()

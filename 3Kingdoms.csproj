@@ -89,9 +89,10 @@
     <Compile Include="Assets\Script\Game\Behavior\Core\MovementBehaviour.cs" />
     <Compile Include="Assets\Script\Game\Behavior\GameController.cs" />
     <Compile Include="Assets\Script\Game\Behavior\Movement\Attacker.cs" />
+    <Compile Include="Assets\Script\Game\Behavior\Movement\CastingMover2.cs" />
     <Compile Include="Assets\Script\Game\Behavior\Movement\Cast\BladeFury.cs" />
-    <Compile Include="Assets\Script\Game\Behavior\Movement\CastingMover.cs" />
     <Compile Include="Assets\Script\Game\Behavior\Movement\Cast\Skewer.cs" />
+    <Compile Include="Assets\Script\Game\Behavior\Movement\CastingMover.cs" />
     <Compile Include="Assets\Script\Game\Behavior\Movement\CollisionDetector.cs" />
     <Compile Include="Assets\Script\Game\Behavior\Movement\Follower.cs" />
     <Compile Include="Assets\Script\Game\Behavior\Movement\Mover.cs" />

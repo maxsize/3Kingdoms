@@ -11,7 +11,8 @@ namespace ThreeK.Game.Behavior.Movement
         public float RunSpeed = 5f;
         public float TurnSpeed = 400f;
 
-        private float Speed = 5f;
+        protected float Speed = 5f;
+
         private Vector3 _target;
         private Animator _animator;
 
@@ -47,7 +48,7 @@ namespace ThreeK.Game.Behavior.Movement
             return dist < Threashold;
         }
 
-        protected void StartMovement()
+        protected virtual void StartMovement()
         {
             Speed = RunSpeed;
             _animator.SetBool("Moving", true);

@@ -18,14 +18,19 @@ namespace ThreeK.Game.Helper
             if (state is TurnState)
                 data.MovementType = typeof(Spinner);
             else if (state is MoveState)
-                data.MovementType = (state is Move2TargetState) ? typeof(Mover2) : typeof(Mover);
+            {
+                if (state is CastingMoveState)
+                {
+                    var ability = ((CastingMoveState)state).Ability;
+                    data.MovementType = ability.IsUnitTarget() ?
+                        typeof(CastingMover2) : typeof(CastingMover);
+                    data.Ability = ability;
+                }
+                else
+                    data.MovementType = (state is Move2TargetState) ? typeof(Mover2) : typeof(Mover);
+            }
             else if (state is AttackState)
                 data.MovementType = typeof(Attacker);
-            else if (state is CastingMoveState)
-            {
-                data.MovementType = typeof(CastingMover);
-                data.Ability = ((CastingMoveState) state).Ability;
-            }
             else if (state is CastState)
             {
                 data.Ability = ((CastState)state).Ability;

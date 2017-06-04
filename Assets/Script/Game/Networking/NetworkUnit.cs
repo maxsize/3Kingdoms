@@ -86,6 +86,7 @@ namespace ThreeK.Game.Networking
             var m = GetMovement(data.MovementType);
             if (m != null)
             {
+                m.SetData(data);
                 m.OnEnd.AddListener(OnStateEnd);
                 m.SetTarget(data.Data, latency);
                 _currentMovement = m;
@@ -220,7 +221,7 @@ namespace ThreeK.Game.Networking
         public void SetData(MovementData data)
         {
             MovementType = data.MovementType.Name;
-            if (data.MovementType == typeof(Mover))
+            if (data.MovementType == typeof(Mover) && data.MovementType == typeof(CastingMover))
             {
                 Velocity = (Vector3)data.Data;
             }
@@ -229,7 +230,6 @@ namespace ThreeK.Game.Networking
                 Rotation = (Quaternion)data.Data;
             }
             else if (data.MovementType == typeof(Mover2) ||
-                data.MovementType == typeof(CastingMover) ||
                 data.MovementType == typeof(Attacker))
             {
                 Target = ((Transform)data.Data).GetComponent<NetworkIdentity>().netId;
