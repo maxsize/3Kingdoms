@@ -15,7 +15,10 @@ namespace ThreeK.Game.Behavior.Movement.Cast
         [Inject]
         public Metadata Meta;
 
-        protected override void SetTarget(float latency)
+        private float _speed = 5f;
+        private Vector3 _destination;
+
+        protected override void SetTarget(Vector3 point, float latency)
         {
             var ability = Meta.Abilities.ToList().Find(a => a.Name == GetType().Name);
             if (ability.Name == null)
@@ -23,28 +26,30 @@ namespace ThreeK.Game.Behavior.Movement.Cast
                 Debug.LogError(string.Format("Ability {0} is not defined.", GetType().Name));
                 return;
             }
-            var duration = ability.Levels[0].Duration - (latency / 1000);
-            StartCoroutine(Wait(duration));
-            StartCoroutine(LateEnd());
-            gameObject.AddComponent<ParticleSystem>();
+            _destination = point;
+            //var duration = ability.Levels[0].Duration - (latency / 1000);
+            transform.Translate(Vector3.forward * _speed * latency);
+        }
+
+        private void FixedUpdate()
+        {
+            transform.Translate(Vector3.forward * _speed * Time.fixedDeltaTime);
+            if (IsReached())
+            {
+                //Debug.Log(transform.position + " - " + _target + " - " + Vector3.Distance(transform.position, _target));
+                transform.position = _destination;   // Correct the final position
+                OnEnd.Invoke();
+                enabled = false;
+            }
+        }
+
+        private bool IsReached()
+        {
+            return Vector3.Distance(_destination, transform.position) < 0.2f;
         }
 
         public override void End()
         {
-        }
-
-        private IEnumerator LateEnd()
-        {
-            yield return null;
-            OnEnd.Invoke();
-        }
-
-        private IEnumerator Wait(float duration)
-        {
-            yield return new WaitForSeconds(duration);
-            enabled = false;
-            var p = gameObject.GetComponent<ParticleSystem>();
-            Destroy(p);
         }
     }
 }

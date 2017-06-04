@@ -33,6 +33,7 @@ namespace Assets.Script.Game.Data
     {
         public string Name;
         public float Radius;
+        public float CastRange;
         public List<int> AbilityTypes;
         public List<int> Effects;
         public List<AbilityLevelVO> Levels;
