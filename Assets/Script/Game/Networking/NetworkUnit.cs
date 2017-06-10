@@ -9,7 +9,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Adic;
 using Assets.Script.Game.Data;
-using Game.Behavior.Anim;
 using Game.Behavior.Movement;
 using ThreeK.Game.Behavior.Movement;
 using ThreeK.Game.Helper;

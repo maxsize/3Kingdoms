@@ -26,7 +26,13 @@ namespace ThreeK.Game.Behavior.Movement
         {
             if (_target != null)
                 transform.rotation = Quaternion.LookRotation(_target - transform.position);
-            base.FixedUpdate();
+            transform.Translate(Vector3.forward * Speed * Time.fixedDeltaTime);
+            if (IsReached())
+            {
+                //Debug.Log(transform.position + " - " + _target + " - " + Vector3.Distance(transform.position, _target));
+                OnEnd.Invoke();
+                enabled = false;
+            }
         }
     }
 }

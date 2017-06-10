@@ -38,7 +38,7 @@
 		},
 		{
 			"Name":"Skewer",
-			"Radius":0,
+			"Radius":20,
 			"AbilityTypes":[
 				2
 			],

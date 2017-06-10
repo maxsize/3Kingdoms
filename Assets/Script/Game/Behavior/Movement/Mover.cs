@@ -6,7 +6,7 @@ namespace ThreeK.Game.Behavior.Movement
 {
     public class Mover : MovementBehaviour
     {
-        public float Threashold = 0.2f;
+        public float Threashold = 0.1f;
         public float WalkSpeed = 2f;
         public float RunSpeed = 5f;
         public float TurnSpeed = 400f;
@@ -38,13 +38,6 @@ namespace ThreeK.Game.Behavior.Movement
             var trans = transform;
             var dist = Vector3.Distance(trans.position, _target);
             //Debug.Log(string.Format("{0} {1} {2}", dist, trans.position, _target));
-            if (dist < 1)
-            {
-                // Close to target, stop running animation
-                Speed = WalkSpeed;
-                _animator.SetBool("Moving", false);
-                _animator.SetBool("Running", false);
-            }
             return dist < Threashold;
         }
 

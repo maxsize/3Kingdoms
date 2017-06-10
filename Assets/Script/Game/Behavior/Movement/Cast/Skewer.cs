@@ -15,8 +15,9 @@ namespace ThreeK.Game.Behavior.Movement.Cast
         [Inject]
         public Metadata Meta;
 
-        private float _speed = 15f;
+        private float _speed = 12f;
         private Vector3 _destination;
+        private DistanceChecker _checker;
 
         protected override void SetTarget(Vector3 point, float latency)
         {
@@ -29,9 +30,10 @@ namespace ThreeK.Game.Behavior.Movement.Cast
             _destination = point;
             //var duration = ability.Levels[0].Duration - (latency / 1000);
             transform.Translate(Vector3.forward * _speed * latency);
+            _checker = new DistanceChecker(_destination, transform);
         }
 
-        private void FixedUpdate()
+        private void Update()
         {
             transform.Translate(Vector3.forward * _speed * Time.fixedDeltaTime);
             if (IsReached())
@@ -45,13 +47,17 @@ namespace ThreeK.Game.Behavior.Movement.Cast
 
         private bool IsReached()
         {
-            var distance = Vector3.Distance(_destination, transform.position);
-            Debug.Log(string.Format("Dis: {0}, {1}, {2}", _destination, transform.position, distance));
-            return distance < 0.2f;
+            return _checker.Check();
         }
 
         public override void End()
         {
+        }
+
+        private void OnDestroy()
+        {
+            if (_checker != null)
+                _checker.Dispose();
         }
     }
 }
